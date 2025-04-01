@@ -3,15 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Access Tracker</title>
+    <title>Access & Money Saving Tracker</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
-        /* Basic styling - you can customize this to match your tracker's look */
+        /* Basic styling */
         body {
             font-family: 'Poppins', sans-serif;
             margin: 0;
             padding: 40px 20px;
-            background: linear-gradient(135deg, #001f3f, #003366);
+            background: linear-gradient(135deg, #001f3f, #003366); /* Base gradient */
             color: #fff;
             display: flex;
             flex-direction: column;
@@ -19,7 +20,34 @@
             justify-content: center;
             min-height: 100vh;
             text-align: center;
+             /* Star layers - Combined from tracker.html */
+             background-image:
+                linear-gradient(135deg, #001f3f, #003366), /* Keep original gradient as top layer */
+                radial-gradient(circle, #ffffff 1px, transparent 1px), /* Small stars */
+                radial-gradient(circle, #ffffff 1px, transparent 1px); /* More small stars */
+            background-size:
+                100% 100%, /* Gradient size */
+                200px 200px, /* Small stars density */
+                300px 300px; /* Slightly different density for variation */
+            background-position:
+                0 0, /* Gradient position */
+                0 0, /* Small stars start */
+                150px 150px; /* Offset second star layer */
+            background-repeat:
+                no-repeat, /* Gradient doesn't repeat */
+                repeat, /* Stars repeat */
+                repeat; /* Stars repeat */
+            overflow-x: hidden; /* Crucial to prevent scrollbars from animation */
+            animation: moveStars 200s linear infinite; /* Apply animation */
         }
+
+        /* Keyframes for star movement (from tracker.html) */
+        @keyframes moveStars {
+            from { background-position: 0 0, 0 0, 150px 150px; }
+            to { background-position: 0 0, -10000px 5000px, -12000px 6000px; }
+        }
+
+        /* --- Login Container Styles (from index.html) --- */
         .login-container {
             background: rgba(255, 255, 255, 0.12);
             border-radius: 16px;
@@ -29,14 +57,17 @@
             border: 1px solid rgba(255, 255, 255, 0.18);
             max-width: 400px;
             width: 90%;
+            /* Initially visible */
+            display: block;
+            margin: auto; /* Center it */
         }
-        h1 {
+        .login-container h1 { /* Adjusted slightly for context */
             font-size: 1.8rem;
             margin-bottom: 25px;
             color: #64ffda;
             text-shadow: 1px 1px 5px rgba(0,0,0,0.4);
         }
-        input[type="password"] {
+        .login-container input[type="password"] { /* Specific to login */
             margin: 15px 0;
             padding: 16px 20px;
             border: none;
@@ -50,7 +81,7 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             outline: none;
         }
-        button {
+        .login-container button { /* Specific to login */
             background: linear-gradient(135deg, #00c853, #64dd17);
             color: white;
             font-weight: 600;
@@ -66,77 +97,952 @@
             margin-top: 10px;
             font-family: 'Poppins', sans-serif;
         }
-        button:hover {
+        .login-container button:hover { /* Specific to login */
             transform: translateY(-3px);
             box-shadow: 0 8px 20px rgba(0, 200, 83, 0.5);
         }
-        #errorMessage {
-            color: #ff4d4d; /* Light red for visibility */
+        #errorMessage { /* Specific to login */
+            color: #ff4d4d;
             margin-top: 15px;
             font-weight: 500;
-            min-height: 1.2em; /* Prevent layout shift */
+            min-height: 1.2em;
         }
-         /* Footer Styles */
+
+        /* --- Tracker Container Styles (wrapper for tracker.html content) --- */
+        .tracker-container {
+            /* Initially hidden */
+            display: none;
+            width: 100%; /* Take full width */
+            max-width: 100%; /* Override potential limits if needed */
+            display: flex; /* Corrected from previous - should be flex initially to use align-items */
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* --- Styles from tracker.html --- */
+        /* Note: Some styles might need minor adjustments if they conflict or assume body-level application */
+
+        .tracker-container h1 { /* Style for tracker title */
+          font-size: 2.5rem;
+          margin-bottom: 30px;
+          text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+          background: linear-gradient(90deg, #64ffda, #48d1cc);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          letter-spacing: 1px;
+          animation: fadeInDown 1.2s ease-out;
+        }
+
+        /* Input Card Styles */
+        .tracker-container form {
+          background: rgba(255, 255, 255, 0.12);
+          border-radius: 16px;
+          padding: 30px;
+          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+          width: 90%;
+          max-width: 450px;
+          backdrop-filter: blur(12px);
+          animation: slideInUp 1s ease-out;
+          position: relative;
+          border: 1px solid rgba(255, 255, 255, 0.18);
+          transform-style: preserve-3d;
+          perspective: 1000px;
+          transition: transform 0.3s ease;
+          margin-bottom: 30px; /* Add margin */
+        }
+
+        .tracker-container form:hover {
+          transform: translateY(-5px) rotateX(2deg);
+        }
+
+        .tracker-container input[type="text"],
+        .tracker-container input[type="number"] {
+          margin: 15px 0;
+          padding: 16px 20px;
+          border: none;
+          border-radius: 12px;
+          width: calc(100% - 40px);
+          font-size: 1rem;
+          font-family: 'Poppins', sans-serif;
+          background-color: rgba(255, 255, 255, 0.9);
+          color: #001f3f;
+          font-weight: 500;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+          transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+          outline: 2px solid transparent;
+        }
+
+        .tracker-container input[type="text"]:focus,
+        .tracker-container input[type="number"]:focus {
+          outline: 2px solid #64ffda;
+          transform: scale(1.02);
+          box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        /* File Input Styling */
+        .tracker-container .file-input-container {
+          position: relative;
+          margin: 15px 0;
+          overflow: hidden;
+        }
+
+        .tracker-container .file-input-label {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: rgba(255, 255, 255, 0.9);
+          color: #001f3f;
+          padding: 16px;
+          border-radius: 12px;
+          text-align: center;
+          cursor: pointer;
+          font-weight: 500;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+          transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .tracker-container .file-input-label:before {
+          content: "📸";
+          margin-right: 10px;
+          font-size: 1.2rem;
+        }
+
+        .tracker-container .file-input-label:hover {
+          transform: scale(1.02);
+          box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+          background-color: rgba(255, 255, 255, 0.95);
+        }
+
+        .tracker-container input[type="file"] {
+          position: absolute;
+          top: 0;
+          left: 0;
+          opacity: 0;
+          width: 100%;
+          height: 100%;
+          cursor: pointer;
+        }
+
+        .tracker-container .file-name {
+          margin-top: 8px;
+          font-size: 0.9rem;
+          color: rgba(255, 255, 255, 0.9);
+          text-align: center;
+          font-style: italic;
+          transition: color 0.3s ease;
+        }
+
+        /* Submit Button Styles */
+        .tracker-container button[type="submit"] {
+          background: linear-gradient(135deg, #00c853, #64dd17);
+          color: white;
+          font-weight: 600;
+          cursor: pointer;
+          padding: 16px;
+          border: none;
+          border-radius: 12px;
+          width: 100%;
+          font-size: 1.1rem;
+          letter-spacing: 1px;
+          box-shadow: 0 4px 15px rgba(0, 200, 83, 0.4);
+          transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+          opacity: 0.5;
+          pointer-events: none;
+          margin-top: 10px;
+          overflow: hidden;
+          position: relative;
+          font-family: 'Poppins', sans-serif;
+        }
+
+        .tracker-container button[type="submit"].enabled {
+          opacity: 1;
+          pointer-events: auto;
+        }
+
+        .tracker-container button[type="submit"].enabled:hover {
+          transform: translateY(-3px) scale(1.02);
+          box-shadow: 0 8px 20px rgba(0, 200, 83, 0.5);
+        }
+
+        .tracker-container button[type="submit"].enabled:active {
+          transform: translateY(1px);
+        }
+
+        .tracker-container button[type="submit"]:after {
+          content: "";
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          width: 5px;
+          height: 5px;
+          background: rgba(255, 255, 255, 0.5);
+          opacity: 0;
+          border-radius: 100%;
+          transform: scale(1, 1) translate(-50%);
+          transform-origin: 50% 50%;
+        }
+
+        @keyframes ripple {
+          0% { transform: scale(0, 0); opacity: 0.5; }
+          100% { transform: scale(100, 100); opacity: 0; }
+        }
+
+        .tracker-container button[type="submit"].enabled:focus:not(:active)::after {
+          animation: ripple 1s ease-out;
+        }
+
+        /* Total Amount Section */
+        .tracker-container .total-amount {
+          margin: 30px 0;
+          padding: 20px;
+          background: rgba(255, 255, 255, 0.12);
+          border-radius: 16px;
+          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+          backdrop-filter: blur(12px);
+          font-size: 1.4rem;
+          text-align: center;
+          width: 90%;
+          max-width: 450px;
+          animation: pulse 2s infinite alternate;
+          border: 1px solid rgba(255, 255, 255, 0.18);
+          text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .tracker-container .total-amount strong {
+          color: #64ffda;
+          font-weight: 700;
+          font-size: 1.6rem;
+        }
+
+        /* Container for download buttons */
+        .tracker-container .download-buttons-container {
+            display: flex;
+            flex-direction: column; /* Stack buttons vertically by default */
+            gap: 10px; /* Space between buttons */
+            width: 90%;
+            max-width: 450px;
+            margin: 20px auto 0 auto; /* Centered below total */
+        }
+
+        /* General Download Button Style */
+        .tracker-container .download-button {
+          color: white;
+          font-weight: 600;
+          cursor: pointer;
+          padding: 12px 20px;
+          border: none;
+          border-radius: 12px;
+          font-size: 1rem;
+          letter-spacing: 0.5px;
+          transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+          width: 100%; /* Full width within container */
+          text-align: center;
+          font-family: 'Poppins', sans-serif;
+          text-decoration: none;
+        }
+
+        /* Specific PDF Button Style */
+         .tracker-container .download-button.pdf {
+             background: linear-gradient(135deg, #1e88e5, #0d47a1); /* Blue gradient */
+             box-shadow: 0 4px 15px rgba(30, 136, 229, 0.4);
+         }
+         .tracker-container .download-button.pdf:hover:not(:disabled) {
+             transform: translateY(-3px) scale(1.02);
+             box-shadow: 0 8px 20px rgba(30, 136, 229, 0.5);
+         }
+
+        /* Specific CSV Button Style */
+         .tracker-container .download-button.csv {
+             background: linear-gradient(135deg, #43a047, #1b5e20); /* Green gradient */
+             box-shadow: 0 4px 15px rgba(67, 160, 71, 0.4);
+         }
+        .tracker-container .download-button.csv:hover:not(:disabled) {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 20px rgba(67, 160, 71, 0.5);
+        }
+
+        .tracker-container .download-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            background: #999; /* Darker gray when disabled */
+             box-shadow: none;
+             transform: none;
+        }
+
+        /* History Section */
+        .tracker-container .history {
+          margin-top: 40px;
+          width: 90%;
+          max-width: 650px;
+          animation: fadeIn 1.2s ease-out;
+        }
+
+        .tracker-container .history h2 {
+          font-size: 1.8rem;
+          margin-bottom: 25px;
+          text-align: center;
+          text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+          position: relative;
+          display: inline-block;
+          left: 50%;
+          transform: translateX(-50%);
+        }
+
+        .tracker-container .history h2:after {
+          content: '';
+          position: absolute;
+          width: 50%;
+          height: 3px;
+          background: linear-gradient(90deg, transparent, #64ffda, transparent);
+          bottom: -8px;
+          left: 25%;
+        }
+
+        .tracker-container .entry-card {
+          background: rgba(255, 255, 255, 0.12);
+          border-radius: 16px;
+          padding: 20px;
+          margin-bottom: 20px;
+          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+          backdrop-filter: blur(12px);
+          border: 1px solid rgba(255, 255, 255, 0.18);
+          transform: translateY(0);
+          transition: opacity 0.5s ease, transform 0.5s ease; /* Added opacity transition */
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: space-between;
+          align-items: center;
+        }
+
+        .tracker-container .entry-card-info {
+          flex: 1;
+          min-width: 60%;
+          padding-right: 15px; /* Add some spacing */
+        }
+
+        .tracker-container .entry-card img {
+          max-width: 100px;
+          max-height: 100px; /* Ensure consistency */
+          border-radius: 8px;
+          margin-top: 10px; /* Add margin if wrapping */
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+          transition: all 0.3s ease;
+          object-fit: cover; /* Crop image to fit */
+          height: auto; /* Allow height to adjust */
+          flex-shrink: 0; /* Prevent image from shrinking */
+        }
+
+        .tracker-container .no-image-placeholder {
+            font-style: italic;
+            color: #ccc;
+            font-size: 0.9em;
+            margin: auto 0; /* Vertically center */
+            text-align: center;
+            flex-basis: 100px; /* Approx width of image */
+            padding: 10px 0; /* Add some padding */
+            align-self: center; /* Align with text block */
+        }
+
+        .tracker-container .entry-card img:hover {
+          transform: scale(1.1);
+        }
+
+        .tracker-container .entry-card p {
+          margin: 6px 0; /* Slightly reduced margin */
+          font-size: 0.95rem; /* Slightly smaller font */
+          word-break: break-word; /* Prevent long words from overflowing */
+        }
+
+        .tracker-container .entry-card:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Table Section */
+        .tracker-container table {
+          margin-top: 40px;
+          width: 90%;
+          max-width: 650px;
+          border-collapse: separate;
+          border-spacing: 0;
+          background: rgba(255, 255, 255, 0.12);
+          border-radius: 16px;
+          overflow: hidden;
+          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+          backdrop-filter: blur(12px);
+          animation: fadeIn 1.2s ease-out;
+          margin-bottom: 50px;
+        }
+
+        .tracker-container table th,
+        .tracker-container table td {
+          padding: 16px;
+          text-align: left;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+          word-break: break-word; /* Prevent long names/amounts breaking layout */
+        }
+
+        .tracker-container table th {
+          background: rgba(255, 255, 255, 0.2);
+          font-weight: 600;
+          letter-spacing: 1px;
+          position: sticky; /* Make header sticky */
+          top: 0; /* Stick to top */
+          z-index: 1; /* Ensure header is above rows */
+        }
+
+        .tracker-container table th:after {
+          content: '';
+          position: absolute;
+          left: 0;
+          bottom: 0;
+          width: 100%;
+          height: 2px;
+          background: linear-gradient(90deg, transparent, rgba(100, 255, 218, 0.5), transparent);
+        }
+
+        .tracker-container table tr:last-child td {
+          border-bottom: none;
+        }
+
+        .tracker-container table tr {
+          transition: background-color 0.3s ease;
+        }
+
+        .tracker-container table tr:hover td {
+          background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .tracker-container table td:first-child {
+          font-weight: 500;
+          text-transform: capitalize; /* Capitalize name in table */
+        }
+
+        .tracker-container table td:last-child {
+          font-weight: 600;
+          color: #64ffda;
+        }
+
+        /* Suggestions Dropdown */
+        .tracker-container .suggestions { /* Added .tracker-container selector */
+          position: absolute;
+          top: calc(100% - 10px); /* Position slightly below input */
+          left: 0;
+          width: 100%;
+          max-height: 150px;
+          overflow-y: auto;
+          background: rgba(255, 255, 255, 0.98); /* More opaque */
+          border-radius: 0 0 12px 12px;
+          box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Stronger shadow */
+          z-index: 10;
+          display: none;
+          scrollbar-width: thin; /* For Firefox */
+          scrollbar-color: #64ffda #001f3f; /* For Firefox */
+        }
+        /* Webkit scrollbar styling */
+        .tracker-container .suggestions::-webkit-scrollbar { /* Added .tracker-container selector */
+            width: 8px;
+        }
+        .tracker-container .suggestions::-webkit-scrollbar-track { /* Added .tracker-container selector */
+            background: rgba(0, 31, 63, 0.5);
+            border-radius: 10px;
+        }
+        .tracker-container .suggestions::-webkit-scrollbar-thumb { /* Added .tracker-container selector */
+            background-color: #64ffda;
+            border-radius: 10px;
+            border: 2px solid rgba(0, 31, 63, 0.5);
+        }
+
+        .tracker-container .suggestions div { /* Added .tracker-container selector */
+          padding: 12px 20px; /* More padding */
+          cursor: pointer;
+          transition: all 0.2s ease;
+          color: #001f3f;
+          font-weight: 500;
+          border-bottom: 1px solid rgba(0, 31, 63, 0.1); /* Subtle divider */
+          text-transform: capitalize; /* Capitalize suggestions */
+        }
+         .tracker-container .suggestions div:last-child { /* Added .tracker-container selector */
+             border-bottom: none;
+         }
+
+        .tracker-container .suggestions div:hover { /* Added .tracker-container selector */
+          background: rgba(100, 255, 218, 0.2); /* Highlight color */
+        }
+
+         /* --- Footer Styles (Common) --- */
          .footer {
-             position: absolute;
-             bottom: 20px;
+             /* position: absolute; /* Removed absolute positioning */
+             /* bottom: 20px; /* Removed */
+             margin-top: 40px; /* Added margin */
+             width: 90%; /* Added width */
+             max-width: 650px; /* Match table width */
+             text-align: center;
              font-size: 0.9rem;
-             color: rgba(255, 255, 255, 0.6);
+             color: rgba(255, 255, 255, 0.7);
+             background: rgba(255, 255, 255, 0.08);
+             border-radius: 10px;
+             padding: 15px 25px;
+             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+             backdrop-filter: blur(10px);
+             border: 1px solid rgba(255, 255, 255, 0.1);
+             transition: all 0.3s ease;
+             animation: fadeIn 1.5s ease-out;
+             line-height: 1.5; /* Improve readability */
          }
          .footer a {
             color: #64ffda;
             text-decoration: none;
+            position: relative; /* Needed for underline effect */
+            transition: all 0.3s ease;
          }
-         .footer a:hover {
-            text-decoration: underline;
-         }
+          .footer a:hover {
+             text-shadow: 0 0 10px rgba(100, 255, 218, 0.6);
+          }
+
+          .footer a::after { /* Underline effect from tracker.html footer */
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -3px;
+            left: 0;
+            background: linear-gradient(90deg, #64ffda, #48d1cc);
+            transition: width 0.3s ease;
+          }
+
+          .footer a:hover::after {
+            width: 100%;
+          }
+
+        /* Enhanced Animations (from tracker.html) */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideInUp { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pulse { from { box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2); } to { box-shadow: 0 8px 32px rgba(100, 255, 218, 0.3); } }
+
+        /* Responsive Design (Combined & Adjusted) */
+        @media (max-width: 600px) {
+          body { padding: 20px 10px; }
+          .login-container { padding: 20px 25px; }
+          .login-container h1 { font-size: 1.6rem; }
+          .tracker-container h1 { font-size: 1.8rem; }
+          .tracker-container form { padding: 20px; }
+          .tracker-container button[type="submit"] { font-size: 1rem; }
+          .tracker-container .download-button { font-size: 0.9rem; padding: 10px 15px; }
+          .tracker-container .history h2 { font-size: 1.5rem; }
+           .tracker-container .entry-card { padding: 15px; }
+            .tracker-container .entry-card img { max-width: 80px; max-height: 80px; }
+           .tracker-container .entry-card p { font-size: 0.9rem; }
+          .tracker-container table { font-size: 0.9rem; }
+           .tracker-container table th, .tracker-container table td { padding: 12px; }
+          .tracker-container .total-amount { font-size: 1.2rem; padding: 15px; }
+          .tracker-container .total-amount strong { font-size: 1.4rem; }
+          .footer { font-size: 0.8rem; padding: 10px 15px; }
+        }
+         @media (min-width: 481px) { /* Side-by-side download buttons */
+            .tracker-container .download-buttons-container { flex-direction: row; }
+             .tracker-container .entry-card img { margin-top: 0; }
+        }
 
     </style>
 </head>
 <body>
-    <div class="login-container">
+    <div class="login-container" id="loginSection">
         <h1>Enter Passcode</h1>
         <input type="password" id="passcodeInput" placeholder="Enter passcode" autocomplete="current-password">
         <button onclick="checkPasscode()">Enter Tracker</button>
         <p id="errorMessage"></p>
     </div>
 
-    <div class="footer">
+    <div class="tracker-container" id="trackerSection">
+      <h1>Money Saving Tracker</h1>
+
+      <form id="trackerForm">
+        <div style="position: relative;">
+          <input type="text" id="name" placeholder="Enter Name" required autocomplete="off" />
+          <div class="suggestions" id="nameSuggestions"></div>
+        </div>
+
+        <div class="file-input-container">
+          <label for="receiptImage" class="file-input-label">Choose Receipt Image</label>
+          <input type="file" id="receiptImage" accept="image/*" required />
+          <div class="file-name" id="fileName">No file chosen</div>
+        </div>
+
+        <input type="number" id="amount" placeholder="Enter Amount (LKR)" required step="0.01" min="0"/>
+        <button type="submit" id="submitButton">Submit</button>
+      </form>
+
+      <div class="total-amount" id="totalAmount">
+        Total Amount Saved: <strong>LKR 0.00</strong>
+      </div>
+
+      <div class="download-buttons-container">
+          <button id="downloadPdfButton" class="download-button pdf" disabled>Download Report (PDF)</button>
+          <button id="downloadCsvButton" class="download-button csv" disabled>Download Data (CSV)</button>
+      </div>
+
+      <div class="history">
+        <h2>History</h2>
+        <div id="historyList">
+             </div>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Total Savings (LKR)</th>
+          </tr>
+        </thead>
+        <tbody id="summaryTable">
+          <tr><td colspan="2" style="text-align: center; font-style: italic; color: #ccc;">Loading data...</td></tr>
+        </tbody>
+      </table>
+
+    </div> <div class="footer">
+         Current time in Sri Lanka: <span id="currentTime">Loading...</span><br>
         <a href="https://t.me/MrLAXAN" target="_blank">𝐃𝐞𝐯𝐞𝐥𝐨𝐩𝐞𝐝 𝐛𝐲 𝐋𝐚𝐤𝐬𝐡𝐚𝐧 🚀💻🔥</a>
     </div>
 
-    <script>
-        function checkPasscode() {
-            // --- !!! IMPORTANT SECURITY WARNING !!! ---
-            // This passcode is VISIBLE in the browser's source code.
-            // Anyone can view it easily. This is NOT secure protection.
-            // Replace "YOUR_SECRET_PASSCODE_HERE" with your desired code.
-            const correctPasscode = "0720"; // <--- CHANGE THIS !!!
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-app.js";
+        import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-database.js";
 
+        // --- Global Scope Variables ---
+        let trackerInitialized = false; // Flag to prevent multiple initializations
+        let database; // Firebase database instance
+
+        // --- Passcode Check Logic (Modified) ---
+        window.checkPasscode = function() {
+            const correctPasscode = "lakshan@123"; // <--- CHANGE THIS !!!
             const enteredPasscode = document.getElementById('passcodeInput').value;
             const errorMessage = document.getElementById('errorMessage');
+            const loginSection = document.getElementById('loginSection');
+            const trackerSection = document.getElementById('trackerSection');
 
             if (enteredPasscode === correctPasscode) {
-                // If passcode is correct, redirect to the main tracker page
-                window.location.href = 'tracker.html';
+                console.log("Passcode correct. Showing tracker.");
+                loginSection.style.display = 'none';
+                trackerSection.style.display = 'flex'; // Use flex to allow CSS centering
+
+                // Initialize the tracker functionality IF NOT already initialized
+                if (!trackerInitialized) {
+                    console.log("Initializing tracker for the first time.");
+                    try {
+                         initializeTracker();
+                         trackerInitialized = true; // Set flag after successful initialization attempt
+                         console.log("Tracker initialization function called.");
+                    } catch (initError) {
+                         console.error("Error during tracker initialization:", initError);
+                         alert("Failed to initialize the tracker. Please check the console for errors.");
+                         // Optionally, revert UI state
+                         // loginSection.style.display = 'block';
+                         // trackerSection.style.display = 'none';
+                    }
+                } else {
+                     console.log("Tracker already initialized.");
+                     // Optional: Maybe refresh data if re-entering?
+                     // loadHistory();
+                }
             } else {
-                // If incorrect, show an error message
+                console.log("Passcode incorrect.");
                 errorMessage.textContent = 'Incorrect passcode. Please try again.';
-                // Optional: Clear the input field after wrong attempt
                 document.getElementById('passcodeInput').value = '';
+                // Ensure correct UI state on failure
+                loginSection.style.display = 'block';
+                trackerSection.style.display = 'none';
             }
         }
 
-        // Optional: Allow pressing the Enter key in the password field to submit
-        document.getElementById('passcodeInput').addEventListener('keypress', function(event) {
-            // Check if the key pressed was 'Enter'
-            if (event.key === 'Enter') {
-                // Prevent the default action, if any
-                event.preventDefault();
-                // Trigger the button element with a click
-                checkPasscode();
+        // Enter key listener for passcode
+        const passcodeInput = document.getElementById('passcodeInput');
+        if (passcodeInput) {
+             passcodeInput.addEventListener('keypress', function(event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    checkPasscode();
+                }
+            });
+        }
+
+        // --- Tracker Logic (Wrapped in a function) ---
+        function initializeTracker() {
+            console.log("Inside initializeTracker function.");
+
+            // Your Firebase configuration (Replace with your actual config)
+            // Ensure these details are correct!
+            const firebaseConfig = {
+                 apiKey: "AIzaSyD1DbAbZ8yLeJxULV2giceFwzRFM6I-FF0", // Replace if needed
+                 authDomain: "websavelxn.firebaseapp.com",          // Replace if needed
+                 databaseURL: "https://websavelxn-default-rtdb.firebaseio.com", // Replace if needed
+                 projectId: "websavelxn",                         // Replace if needed
+                 storageBucket: "websavelxn.firebasestorage.app",   // Replace if needed
+                 messagingSenderId: "781394117165",                // Replace if needed
+                 appId: "1:781394117165:web:cf042f7d5de2776222eea4" // Replace if needed
+            };
+
+            // Initialize Firebase
+            try {
+                const app = initializeApp(firebaseConfig);
+                database = getDatabase(app); // Assign to global scope variable
+                console.log("Firebase App initialized and Database instance created.");
+            } catch (fbError) {
+                 console.error("Firebase Initialization Failed:", fbError);
+                 alert("Critical Error: Could not initialize Firebase connection. Tracker functionality will be disabled.");
+                 // Disable form/buttons maybe?
+                 const submitBtn = document.getElementById("submitButton");
+                 if(submitBtn) submitBtn.disabled = true;
+                 return; // Stop initialization if Firebase fails
             }
-        });
+
+
+            // ImgBB API Key (Replace with your actual key)
+            const IMGBB_API_KEY = "c59fd4d2f34bb26b393faaf7affe501f"; // Replace if needed
+
+            // DOM Elements (Check these IDs match your HTML structure)
+            const trackerForm = document.getElementById("trackerForm");
+            const historyList = document.getElementById("historyList");
+            const submitButton = document.getElementById("submitButton");
+            const totalAmountDisplay = document.getElementById("totalAmount");
+            const summaryTable = document.getElementById("summaryTable");
+            const nameInput = document.getElementById("name");
+            const nameSuggestions = document.getElementById("nameSuggestions");
+            const receiptImageInput = document.getElementById("receiptImage");
+            const fileNameDisplay = document.getElementById("fileName");
+            const downloadPdfButton = document.getElementById("downloadPdfButton");
+            const downloadCsvButton = document.getElementById("downloadCsvButton");
+            const currentTimeDisplay = document.getElementById("currentTime");
+
+            // --- State Variables ---
+            let totalAmount = 0;
+            const previousNames = new Set();
+            let allEntriesData = {};
+            let allSummaryData = {};
+            let allRawEntries = [];
+
+            // --- Current Time Display ---
+             function updateCurrentTime() {
+                try {
+                    const now = new Date();
+                    const options = { timeZone: 'Asia/Colombo', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+                    if(currentTimeDisplay) currentTimeDisplay.textContent = now.toLocaleString('en-US', options);
+                } catch (e) { console.error("Error updating time:", e); if(currentTimeDisplay) currentTimeDisplay.textContent = "Error"; }
+            }
+            updateCurrentTime();
+            setInterval(updateCurrentTime, 1000);
+
+            // --- Event Listeners ---
+            if(receiptImageInput) {
+                receiptImageInput.addEventListener("change", function() {
+                  if (this.files && this.files[0]) { if(fileNameDisplay) { fileNameDisplay.textContent = this.files[0].name; fileNameDisplay.style.color = "#64ffda"; } }
+                  else { if(fileNameDisplay) { fileNameDisplay.textContent = "No file chosen"; fileNameDisplay.style.color = "rgba(255, 255, 255, 0.9)"; } }
+                  checkFormValidity();
+                });
+            } else { console.error("Element with ID 'receiptImage' not found."); }
+
+            if (trackerForm) {
+                 trackerForm.addEventListener("submit", handleFormSubmit);
+                 trackerForm.addEventListener("input", checkFormValidity);
+            } else { console.error("Element with ID 'trackerForm' not found."); }
+
+
+            // Suggestions Logic
+            if (nameInput) {
+                nameInput.addEventListener("input", handleNameInput);
+                nameInput.addEventListener("focus", handleNameFocus);
+            } else { console.error("Element with ID 'nameInput' not found."); }
+            document.addEventListener("click", handleDocClickForSuggestions);
+
+            // Download Buttons
+            if (downloadPdfButton) {
+                 downloadPdfButton.addEventListener("click", generatePdf);
+            } else { console.error("Element with ID 'downloadPdfButton' not found."); }
+             if (downloadCsvButton) {
+                 downloadCsvButton.addEventListener("click", generateCsv);
+             } else { console.error("Element with ID 'downloadCsvButton' not found."); }
+
+            // --- Core Functions ---
+            async function uploadImage(file) {
+                const formData = new FormData(); formData.append("image", file); formData.append("key", IMGBB_API_KEY);
+                try {
+                  const response = await fetch("https://api.imgbb.com/1/upload", { method: "POST", body: formData });
+                  const data = await response.json();
+                  if (!data.success) { throw new Error("ImgBB upload failed: " + (data.error?.message || data.status_code || "Unknown error")); }
+                  console.log("ImgBB Upload successful:", data.data.url);
+                  return data.data.url;
+                } catch (error) { console.error("ImgBB Fetch/Upload Error:", error); alert(`Image upload failed: ${error.message}.`); throw error; }
+            }
+
+            function saveEntry(name, imageUrl, amount) {
+                if (!database) { console.error("Firebase DB not ready for saveEntry."); return; }
+                const timestamp = Date.now(); const entryPath = `entries/${timestamp}`; const entryRef = ref(database, entryPath);
+                set(entryRef, { name: name.trim().toLowerCase(), imageUrl, amount: parseFloat(amount), timestamp })
+                   .then(() => console.log("Firebase save successful for:", name))
+                   .catch(error => { console.error("Firebase save error:", error); alert("Failed to save data."); });
+            }
+
+            function loadHistory() {
+              console.log("Attempting to load history from Firebase.");
+              if (!database) {
+                  console.error("Firebase database is not initialized. Cannot load history.");
+                  if(historyList) historyList.innerHTML = '<p style="text-align: center; font-style: italic; color: #f00;">Error: Database connection failed.</p>';
+                  return;
+              }
+              const entriesRef = ref(database, "entries");
+              onValue(entriesRef, (snapshot) => {
+                console.log("Firebase onValue triggered.");
+                // Reset state before processing
+                if(historyList) historyList.innerHTML = "";
+                totalAmount = 0; const summaryData = {}; const entriesGroupedByName = {}; let rawEntriesList = []; previousNames.clear();
+                try {
+                    const entries = snapshot.val();
+                    if (entries) {
+                      console.log(`Found ${Object.keys(entries).length} entries.`);
+                      const sortedEntries = Object.values(entries).filter(entry => entry && typeof entry.name === 'string' && typeof entry.timestamp === 'number' && typeof entry.amount === 'number').sort((a, b) => b.timestamp - a.timestamp);
+                       rawEntriesList = [...sortedEntries];
+                       sortedEntries.forEach((entry, index) => {
+                           try {
+                               const amountValue = parseFloat(entry.amount) || 0; totalAmount += amountValue; addEntryToHistory(entry); const name = entry.name.trim().toLowerCase(); previousNames.add(name); if (!summaryData[name]) { summaryData[name] = 0; entriesGroupedByName[name] = []; } summaryData[name] += amountValue; entriesGroupedByName[name].push({ amount: amountValue, timestamp: entry.timestamp, imageUrl: entry.imageUrl || null });
+                           } catch(entryProcessError) {
+                                console.error(`Error processing entry index ${index}:`, entry, entryProcessError);
+                           }
+                        });
+                        for(const name in entriesGroupedByName) { if(entriesGroupedByName.hasOwnProperty(name)) entriesGroupedByName[name].sort((a, b) => b.timestamp - a.timestamp); }
+                    } else {
+                        console.log("No entries found in Firebase.");
+                        if(historyList) historyList.innerHTML = '<p style="text-align: center; font-style: italic; color: #ccc;">No history entries found.</p>';
+                    }
+                    // Update global state and UI
+                    allEntriesData = entriesGroupedByName; allSummaryData = summaryData; allRawEntries = rawEntriesList;
+                    if(totalAmountDisplay) totalAmountDisplay.innerHTML = `Total Amount Saved: <strong>LKR ${totalAmount.toFixed(2)}</strong>`;
+                    updateSummaryTable(summaryData);
+                    const hasData = allRawEntries.length > 0;
+                    if(downloadPdfButton) downloadPdfButton.disabled = !hasData;
+                    if(downloadCsvButton) downloadCsvButton.disabled = !hasData;
+                    console.log("History processed and UI updated. Total:", totalAmount);
+
+                } catch (processingError) {
+                     console.error("Error processing Firebase snapshot data:", processingError);
+                     if(historyList) historyList.innerHTML = '<p style="text-align: center; font-style: italic; color: #f00;">Error processing history data.</p>';
+                     if(totalAmountDisplay) totalAmountDisplay.innerHTML = `Total Amount Saved: <strong>LKR 0.00</strong>`;
+                     updateSummaryTable({});
+                     if(downloadPdfButton) downloadPdfButton.disabled = true;
+                     if(downloadCsvButton) downloadCsvButton.disabled = true;
+                }
+
+              }, (error) => {
+                console.error("Firebase read error:", error);
+                alert("Could not load data from the database. Check console for details.");
+                // Reset UI on read error
+                 allEntriesData = {}; allSummaryData = {}; allRawEntries = [];
+                 if(totalAmountDisplay) totalAmountDisplay.innerHTML = `Total Amount Saved: <strong>LKR 0.00</strong>`;
+                 updateSummaryTable({});
+                 if(historyList) historyList.innerHTML = '<p style="text-align: center; font-style: italic; color: #f00;">Error loading history.</p>';
+                 if(downloadPdfButton) downloadPdfButton.disabled = true;
+                 if(downloadCsvButton) downloadCsvButton.disabled = true;
+              });
+            }
+
+            function addEntryToHistory(entry) {
+                try {
+                    if(!historyList) { console.error("historyList element not found for addEntryToHistory"); return; }
+                    const entryCard = document.createElement("div"); entryCard.classList.add("entry-card"); const entryDate = new Date(entry.timestamp).toLocaleString('en-LK', { timeZone: 'Asia/Colombo' }); const entryAmount = (parseFloat(entry.amount) || 0).toFixed(2); const displayName = entry.name.charAt(0).toUpperCase() + entry.name.slice(1); const imageHtml = entry.imageUrl ? `<img src="${entry.imageUrl}" alt="Receipt" loading="lazy" />` : '<p class="no-image-placeholder">(No Image)</p>'; entryCard.innerHTML = `<div class="entry-card-info"><p><strong>Name:</strong> ${displayName}</p><p><strong>Amount:</strong> LKR ${entryAmount}</p><p><strong>Date:</strong> ${entryDate}</p></div>${imageHtml}`; historyList.prepend(entryCard); requestAnimationFrame(() => { entryCard.style.opacity = "0"; entryCard.style.transform = "translateY(-20px)"; requestAnimationFrame(() => { entryCard.style.opacity = "1"; entryCard.style.transform = "translateY(0)"; }); });
+                 } catch (domError) { console.error("Error adding entry card to DOM:", entry, domError); }
+            }
+
+            function updateSummaryTable(summaryData) {
+                 try {
+                    if(!summaryTable) { console.error("summaryTable element not found for updateSummaryTable"); return; }
+                    summaryTable.innerHTML = ""; const sortedNames = Object.keys(summaryData).sort();
+                     if (sortedNames.length === 0) { summaryTable.innerHTML = `<tr><td colspan="2" style="text-align: center; font-style: italic; color: #ccc;">No summary data available.</td></tr>`; }
+                     else { sortedNames.forEach(name => { const total = summaryData[name]; const row = document.createElement("tr"); const displayName = name.charAt(0).toUpperCase() + name.slice(1); row.innerHTML = `<td>${displayName}</td><td>LKR ${total.toFixed(2)}</td>`; summaryTable.appendChild(row); }); }
+                 } catch (tableError) { console.error("Error updating summary table:", tableError); }
+            }
+
+            function checkFormValidity() {
+                if (!nameInput || !receiptImageInput || !submitButton) return; // Safety check
+                const name = nameInput.value.trim(); const receiptImage = receiptImageInput.files[0]; const amountElem = document.getElementById("amount"); const amount = amountElem ? amountElem.value.trim() : "";
+                const isValidAmount = amount && !isNaN(parseFloat(amount)) && parseFloat(amount) >= 0; const isValidName = name && !/\d/.test(name);
+                submitButton.classList.toggle('enabled', isValidName && receiptImage && isValidAmount);
+            }
+
+            async function handleFormSubmit(e) {
+                e.preventDefault();
+                if (!submitButton || !submitButton.classList.contains('enabled')) { return; }
+                if (!nameInput || !receiptImageInput) return;
+
+                const name = nameInput.value.trim(); const receiptImage = receiptImageInput.files[0]; const amountElem = document.getElementById("amount"); const amount = amountElem ? amountElem.value.trim() : "";
+
+                 if (!name || /\d/.test(name) || !receiptImage || !amount || isNaN(parseFloat(amount)) || parseFloat(amount) < 0) { alert("Please ensure all fields are correctly filled."); return; }
+                submitButton.innerHTML = "Saving..."; submitButton.disabled = true; submitButton.classList.remove('enabled');
+                try { const imageUrl = await uploadImage(receiptImage); saveEntry(name, imageUrl, amount); /* No explicit loadHistory needed due to onValue */ setTimeout(() => { submitButton.innerHTML = "Submit"; submitButton.disabled = false; checkFormValidity(); }, 500); if(trackerForm) trackerForm.reset(); if(fileNameDisplay) { fileNameDisplay.textContent = "No file chosen"; fileNameDisplay.style.color = "rgba(255, 255, 255, 0.9)"; } if(nameSuggestions) nameSuggestions.style.display = 'none'; }
+                catch (error) { console.error("Error during form submission process:", error); submitButton.innerHTML = "Submit"; submitButton.disabled = false; checkFormValidity(); } // Restore button state on error
+            }
+
+             // Suggestions Handlers
+            function handleNameInput() {
+                 if (!nameInput || !nameSuggestions) return;
+                 const inputText = nameInput.value.trim().toLowerCase(); nameSuggestions.innerHTML = ""; if (inputText.length > 0 && previousNames.size > 0) { const filteredNames = Array.from(previousNames).filter(name => name.toLowerCase().includes(inputText)).sort(); if (filteredNames.length > 0) { nameSuggestions.style.display = "block"; filteredNames.forEach((name) => { const suggestionDiv = document.createElement("div"); suggestionDiv.textContent = name.charAt(0).toUpperCase() + name.slice(1); suggestionDiv.addEventListener("click", () => { nameInput.value = name.charAt(0).toUpperCase() + name.slice(1); nameSuggestions.style.display = "none"; checkFormValidity(); nameInput.focus(); }); nameSuggestions.appendChild(suggestionDiv); }); } else { nameSuggestions.style.display = "none"; } } else { nameSuggestions.style.display = "none"; }
+            }
+            function handleNameFocus() {
+                 if (!nameInput || !nameSuggestions) return;
+                 const inputText = nameInput.value.trim().toLowerCase(); if (inputText.length === 0 && previousNames.size > 0) { nameSuggestions.innerHTML = ""; nameSuggestions.style.display = "block"; const sortedNames = Array.from(previousNames).sort(); sortedNames.forEach((name) => { const suggestionDiv = document.createElement("div"); suggestionDiv.textContent = name.charAt(0).toUpperCase() + name.slice(1); suggestionDiv.addEventListener("click", () => { nameInput.value = name.charAt(0).toUpperCase() + name.slice(1); nameSuggestions.style.display = "none"; checkFormValidity(); nameInput.focus(); }); nameSuggestions.appendChild(suggestionDiv); }); } else if (inputText.length > 0) { nameInput.dispatchEvent(new Event('input')); }
+            }
+             function handleDocClickForSuggestions(e) {
+                 if (!nameInput || !nameSuggestions) return;
+                 if (!nameInput.contains(e.target) && !nameSuggestions.contains(e.target)) { nameSuggestions.style.display = "none"; }
+             }
+
+            // --- PDF & CSV Generation Functions ---
+            async function getImageBase64(url) { /* ... same as before ... */
+                 const fetchUrl = url; try { const response = await fetch(fetchUrl); if (!response.ok) { throw new Error(`HTTP error! status: ${response.status}`); } const blob = await response.blob(); if (!blob.type.startsWith('image/')) { console.warn(`Workspaceed data is not an image type: ${blob.type}`); } return new Promise((resolve, reject) => { const reader = new FileReader(); reader.onloadend = () => resolve(reader.result); reader.onerror = reject; reader.readAsDataURL(blob); }); } catch (error) { console.error(`Could not fetch image ${url}:`, error); return null; }
+             }
+            async function generatePdf() { /* ... same as before ... */
+                console.log("Starting PDF generation."); if (Object.keys(allEntriesData).length === 0) { alert("No data available to generate PDF."); return; } if(downloadPdfButton) { downloadPdfButton.textContent = "Generating PDF..."; downloadPdfButton.disabled = true; } if(downloadCsvButton) downloadCsvButton.disabled = true;
+                try {
+                     const { jsPDF } = window.jspdf; const doc = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' }); const pageHeight = doc.internal.pageSize.height; const pageWidth = doc.internal.pageSize.width; let yPos = 15; const margin = 10; const contentWidth = pageWidth - 2 * margin; const imageMaxHeight = 50; const imageMaxWidth = contentWidth / 2; const lineSpacing = 5; const entrySpacing = 8; const personSpacing = 12; doc.setFontSize(18); doc.text("Money Saving Tracker - Full Report", pageWidth / 2, yPos, { align: 'center' }); yPos += 8; doc.setFontSize(10); const generationDate = new Date().toLocaleString('en-LK', { timeZone: 'Asia/Colombo' }); doc.text(`Generated on: ${generationDate}`, pageWidth / 2, yPos, { align: 'center' }); yPos += 15; const names = Object.keys(allEntriesData).sort();
+                     for (const name of names) { const entries = allEntriesData[name]; const totalSaved = allSummaryData[name] || 0; const displayName = name.charAt(0).toUpperCase() + name.slice(1); if (yPos + 20 > pageHeight - margin) { doc.addPage(); yPos = 15; } doc.setFontSize(14); doc.setFont(undefined, 'bold'); const splitName = doc.splitTextToSize(displayName, contentWidth); doc.text(splitName, margin, yPos); yPos += (splitName.length * lineSpacing) + 2; doc.setFontSize(11); doc.setFont(undefined, 'normal'); doc.text(`Total Saved: LKR ${totalSaved.toFixed(2)}`, margin, yPos); yPos += lineSpacing * 2; for (const entry of entries) { const entryDate = new Date(entry.timestamp).toLocaleString('en-LK', { timeZone: 'Asia/Colombo' }); const entryAmount = `LKR ${parseFloat(entry.amount).toFixed(2)}`; const textLine1 = `Date: ${entryDate}`; const textLine2 = `Amount: ${entryAmount}`; const textHeight = lineSpacing * 2 + 2; let imgBase64 = null; let finalImgHeight = 0; let finalImgWidth = 0; let imgErrorText = null; let imgFileType = 'JPEG'; if (entry.imageUrl) { imgBase64 = await getImageBase64(entry.imageUrl); if (imgBase64) { try { const imgProps = doc.getImageProperties(imgBase64); imgFileType = imgProps.fileType; let imgWidth = imgProps.width; let imgHeight = imgProps.height; const scale = Math.min(imageMaxWidth / imgWidth, imageMaxHeight / imgHeight, 1); finalImgWidth = imgWidth * scale; finalImgHeight = imgHeight * scale; } catch(e) { imgBase64 = null; imgErrorText = "(Error processing image)"; finalImgHeight = lineSpacing; console.error("jsPDF getImageProperties error:", e); } } else { imgErrorText = "(Image could not be loaded)"; finalImgHeight = lineSpacing; } } else { imgErrorText = "(No receipt image provided)"; finalImgHeight = lineSpacing; } const requiredHeight = textHeight + finalImgHeight + entrySpacing; if (yPos + requiredHeight > pageHeight - margin) { doc.addPage(); yPos = 15; } doc.setFontSize(10); doc.text(textLine1, margin, yPos); yPos += lineSpacing; doc.text(textLine2, margin, yPos); yPos += lineSpacing; if (imgBase64) { try { doc.addImage(imgBase64, imgFileType, margin, yPos, finalImgWidth, finalImgHeight); yPos += finalImgHeight + lineSpacing / 2; } catch(e) { doc.setTextColor(255, 0, 0); doc.text("(Error adding image)", margin, yPos); doc.setTextColor(0, 0, 0); yPos += lineSpacing; console.error("jsPDF addImage error:", e); } } else if (imgErrorText) { doc.setTextColor(150, 150, 150); doc.setFontSize(9); doc.text(imgErrorText, margin, yPos); doc.setTextColor(0, 0, 0); doc.setFontSize(10); yPos += lineSpacing; } yPos += entrySpacing - lineSpacing / 2; } yPos += personSpacing - entrySpacing; }
+                     // Footer
+                     const pageCount = doc.internal.getNumberOfPages(); const footerText = "</>Developed by Lakshan"; const footerY = pageHeight - 7; doc.setFontSize(8); doc.setTextColor(100, 100, 100); for (let i = 1; i <= pageCount; i++) { doc.setPage(i); try { const textWidth = doc.getStringUnitWidth(footerText) * doc.internal.getFontSize() / doc.internal.scaleFactor; const textX = pageWidth - margin - textWidth; doc.text(footerText, textX, footerY); } catch (e) { console.warn("Could not calculate width for footer text, using left align.", e); doc.text(footerText, margin, footerY); } } doc.setFontSize(10); doc.setTextColor(0, 0, 0);
+                     // Save
+                     doc.save(`money-saving-report-${Date.now()}.pdf`);
+                     console.log("PDF generation successful.");
+                 } catch (pdfError) {
+                    console.error("Error generating PDF:", pdfError);
+                    alert("Failed to generate the PDF. Check console for details.");
+                 } finally {
+                     const hasData = allRawEntries.length > 0;
+                     if(downloadPdfButton) { downloadPdfButton.textContent = "Download Report (PDF)"; downloadPdfButton.disabled = !hasData; }
+                     if(downloadCsvButton) downloadCsvButton.disabled = !hasData;
+                 }
+            }
+            function generateCsv() { /* ... same as before ... */
+                console.log("Starting CSV generation."); if (allRawEntries.length === 0) { alert("No data available to generate CSV."); return; } if(downloadCsvButton) { downloadCsvButton.textContent = "Generating CSV..."; downloadCsvButton.disabled = true; } if(downloadPdfButton) downloadPdfButton.disabled = true;
+                try { const csvRows = []; const headers = ["Timestamp", "Date (Asia/Colombo)", "Name", "Amount (LKR)", "Image URL"]; csvRows.push(headers.map(escapeCsvValue).join(',')); allRawEntries.forEach(entry => { const timestamp = entry.timestamp; const formattedDate = new Date(entry.timestamp).toLocaleString('en-LK', { timeZone: 'Asia/Colombo' }); const name = entry.name.charAt(0).toUpperCase() + entry.name.slice(1); const amount = (parseFloat(entry.amount) || 0).toFixed(2); const imageUrl = entry.imageUrl || ''; const row = [ timestamp, formattedDate, name, amount, imageUrl ]; csvRows.push(row.map(escapeCsvValue).join(',')); }); const csvString = '\uFEFF' + csvRows.join('\n'); const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' }); const link = document.createElement("a"); if (link.download !== undefined) { const url = URL.createObjectURL(blob); link.setAttribute("href", url); link.setAttribute("download", `money-saving-data-${Date.now()}.csv`); link.style.visibility = 'hidden'; document.body.appendChild(link); link.click(); document.body.removeChild(link); URL.revokeObjectURL(url); console.log("CSV generation successful."); } else { alert("CSV download via link generation is not supported."); } }
+                catch (csvError) { console.error("Error generating CSV:", csvError); alert("Failed to generate CSV data."); }
+                finally { const hasData = allRawEntries.length > 0; if(downloadCsvButton) { downloadCsvButton.textContent = "Download Data (CSV)"; downloadCsvButton.disabled = !hasData; } if(downloadPdfButton) downloadPdfButton.disabled = !hasData; }
+            }
+            function escapeCsvValue(value) { /* ... same as before ... */ const stringValue = value === null || value === undefined ? '' : String(value); const escapedQuotes = stringValue.replace(/"/g, '""'); if (escapedQuotes.includes(',') || escapedQuotes.includes('"') || escapedQuotes.includes('\n')) { return `"${escapedQuotes}"`; } return escapedQuotes; }
+
+            // --- Initial Load for Tracker ---
+            console.log("Running initial loadHistory call within initializeTracker.");
+            loadHistory();
+            checkFormValidity(); // Check form validity on initialization
+
+        } // End of initializeTracker function
+
+        // --- Initial Page State ---
+        // Ensure login is shown and tracker is hidden initially
+        const initialLoginSection = document.getElementById('loginSection');
+        const initialTrackerSection = document.getElementById('trackerSection');
+        if (initialLoginSection) initialLoginSection.style.display = 'block';
+        if (initialTrackerSection) initialTrackerSection.style.display = 'none';
+        console.log("Initial page state set: Login visible, Tracker hidden.");
+
     </script>
+
 </body>
 </html>

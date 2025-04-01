@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Access Tracker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Basic styling - you can customize this to match your tracker's look */
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #001f3f, #003366);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+        }
+        .login-container {
+            background: rgba(255, 255, 255, 0.12);
+            border-radius: 16px;
+            padding: 30px 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            max-width: 400px;
+            width: 90%;
+        }
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            color: #64ffda;
+            text-shadow: 1px 1px 5px rgba(0,0,0,0.4);
+        }
+        input[type="password"] {
+            margin: 15px 0;
+            padding: 16px 20px;
+            border: none;
+            border-radius: 12px;
+            width: calc(100% - 40px);
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+            background-color: rgba(255, 255, 255, 0.9);
+            color: #001f3f;
+            font-weight: 500;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            outline: none;
+        }
+        button {
+            background: linear-gradient(135deg, #00c853, #64dd17);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            width: 100%;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(0, 200, 83, 0.4);
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            font-family: 'Poppins', sans-serif;
+        }
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 200, 83, 0.5);
+        }
+        #errorMessage {
+            color: #ff4d4d; /* Light red for visibility */
+            margin-top: 15px;
+            font-weight: 500;
+            min-height: 1.2em; /* Prevent layout shift */
+        }
+         /* Footer Styles */
+         .footer {
+             position: absolute;
+             bottom: 20px;
+             font-size: 0.9rem;
+             color: rgba(255, 255, 255, 0.6);
+         }
+         .footer a {
+            color: #64ffda;
+            text-decoration: none;
+         }
+         .footer a:hover {
+            text-decoration: underline;
+         }
+
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h1>Enter Passcode</h1>
+        <input type="password" id="passcodeInput" placeholder="Enter passcode" autocomplete="current-password">
+        <button onclick="checkPasscode()">Enter Tracker</button>
+        <p id="errorMessage"></p>
+    </div>
+
+    <div class="footer">
+        <a href="https://t.me/MrLAXAN" target="_blank">𝐃𝐞𝐯𝐞𝐥𝐨𝐩𝐞𝐝 𝐛𝐲 𝐋𝐚𝐤𝐬𝐡𝐚𝐧 🚀💻🔥</a>
+    </div>
+
+    <script>
+        function checkPasscode() {
+            // --- !!! IMPORTANT SECURITY WARNING !!! ---
+            // This passcode is VISIBLE in the browser's source code.
+            // Anyone can view it easily. This is NOT secure protection.
+            // Replace "YOUR_SECRET_PASSCODE_HERE" with your desired code.
+            const correctPasscode = "lakshan@123"; // <--- CHANGE THIS !!!
+
+            const enteredPasscode = document.getElementById('passcodeInput').value;
+            const errorMessage = document.getElementById('errorMessage');
+
+            if (enteredPasscode === correctPasscode) {
+                // If passcode is correct, redirect to the main tracker page
+                window.location.href = 'tracker.html';
+            } else {
+                // If incorrect, show an error message
+                errorMessage.textContent = 'Incorrect passcode. Please try again.';
+                // Optional: Clear the input field after wrong attempt
+                document.getElementById('passcodeInput').value = '';
+            }
+        }
+
+        // Optional: Allow pressing the Enter key in the password field to submit
+        document.getElementById('passcodeInput').addEventListener('keypress', function(event) {
+            // Check if the key pressed was 'Enter'
+            if (event.key === 'Enter') {
+                // Prevent the default action, if any
+                event.preventDefault();
+                // Trigger the button element with a click
+                checkPasscode();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -8,93 +8,24 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         /* Basic styling */
-        body {
-            font-family: 'Poppins', sans-serif;
-            margin: 0;
-            padding: 40px 20px;
-            background: linear-gradient(135deg, #001f3f, #003366); /* Base gradient */
-            color: #fff;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start; /* Changed to flex-start */
-            min-height: 100vh;
-            text-align: center;
-             /* Star layers */
-             background-image:
-                linear-gradient(135deg, #001f3f, #003366),
-                radial-gradient(circle, #ffffff 1px, transparent 1px),
-                radial-gradient(circle, #ffffff 1px, transparent 1px);
-            background-size:
-                100% 100%, 200px 200px, 300px 300px;
-            background-position:
-                0 0, 0 0, 150px 150px;
-            background-repeat:
-                no-repeat, repeat, repeat;
-            overflow-x: hidden;
-            animation: moveStars 200s linear infinite;
-        }
+        body { font-family: 'Poppins', sans-serif; margin: 0; padding: 40px 20px; background: linear-gradient(135deg, #001f3f, #003366); color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; min-height: 100vh; text-align: center; background-image: linear-gradient(135deg, #001f3f, #003366), radial-gradient(circle, #ffffff 1px, transparent 1px), radial-gradient(circle, #ffffff 1px, transparent 1px); background-size: 100% 100%, 200px 200px, 300px 300px; background-position: 0 0, 0 0, 150px 150px; background-repeat: no-repeat, repeat, repeat; overflow-x: hidden; animation: moveStars 200s linear infinite; }
+        @keyframes moveStars { from { background-position: 0 0, 0 0, 150px 150px; } to { background-position: 0 0, -10000px 5000px, -12000px 6000px; } }
 
-        @keyframes moveStars {
-            from { background-position: 0 0, 0 0, 150px 150px; }
-            to { background-position: 0 0, -10000px 5000px, -12000px 6000px; }
-        }
+        /* Login Container */
+        .login-container { background: rgba(255, 255, 255, 0.12); border-radius: 16px; padding: 30px 40px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.18); max-width: 400px; width: 90%; display: block; margin: 40px auto; }
+        .login-container h1 { font-size: 1.8rem; margin-bottom: 25px; color: #64ffda; text-shadow: 1px 1px 5px rgba(0,0,0,0.4); }
+        .login-container input[type="password"] { margin: 15px 0; padding: 16px 20px; border: none; border-radius: 12px; width: calc(100% - 40px); font-size: 1rem; font-family: 'Poppins', sans-serif; background-color: rgba(255, 255, 255, 0.9); color: #001f3f; font-weight: 500; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); outline: none; }
+        .login-container button { background: linear-gradient(135deg, #00c853, #64dd17); color: white; font-weight: 600; cursor: pointer; padding: 16px; border: none; border-radius: 12px; width: 100%; font-size: 1.1rem; letter-spacing: 1px; box-shadow: 0 4px 15px rgba(0, 200, 83, 0.4); transition: all 0.3s ease; margin-top: 10px; font-family: 'Poppins', sans-serif; }
+        .login-container button:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0, 200, 83, 0.5); }
+        #errorMessage { color: #ff4d4d; margin-top: 15px; font-weight: 500; min-height: 1.2em; }
 
-        /* --- Login Container Styles --- */
-        .login-container {
-            background: rgba(255, 255, 255, 0.12);
-            border-radius: 16px;
-            padding: 30px 40px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            max-width: 400px;
-            width: 90%;
-            display: block;
-            margin: 40px auto; /* Added top/bottom margin */
-        }
-        .login-container h1 {
-            font-size: 1.8rem; margin-bottom: 25px; color: #64ffda; text-shadow: 1px 1px 5px rgba(0,0,0,0.4);
-        }
-        .login-container input[type="password"] {
-            margin: 15px 0; padding: 16px 20px; border: none; border-radius: 12px; width: calc(100% - 40px); font-size: 1rem; font-family: 'Poppins', sans-serif; background-color: rgba(255, 255, 255, 0.9); color: #001f3f; font-weight: 500; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); outline: none;
-        }
-        .login-container button {
-            background: linear-gradient(135deg, #00c853, #64dd17); color: white; font-weight: 600; cursor: pointer; padding: 16px; border: none; border-radius: 12px; width: 100%; font-size: 1.1rem; letter-spacing: 1px; box-shadow: 0 4px 15px rgba(0, 200, 83, 0.4); transition: all 0.3s ease; margin-top: 10px; font-family: 'Poppins', sans-serif;
-        }
-        .login-container button:hover {
-            transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0, 200, 83, 0.5);
-        }
-        #errorMessage {
-            color: #ff4d4d; margin-top: 15px; font-weight: 500; min-height: 1.2em;
-        }
-
-        /* --- Tracker Container Styles --- */
-        .tracker-container {
-            display: none; /* Initially hidden */
-            width: 100%;
-            max-width: 100%;
-            display: flex; /* Use flex */
-            flex-direction: column;
-            align-items: center;
-            padding-bottom: 80px; /* Add padding to avoid footer overlap */
-        }
-
-        .tracker-container h1 {
-          font-size: 2.5rem; margin-bottom: 30px; text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5); background: linear-gradient(90deg, #64ffda, #48d1cc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 1px; animation: fadeInDown 1.2s ease-out;
-        }
-        .tracker-container form {
-          background: rgba(255, 255, 255, 0.12); border-radius: 16px; padding: 30px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); width: 90%; max-width: 450px; backdrop-filter: blur(12px); animation: slideInUp 1s ease-out; position: relative; border: 1px solid rgba(255, 255, 255, 0.18); transform-style: preserve-3d; perspective: 1000px; transition: transform 0.3s ease; margin-bottom: 30px;
-        }
+        /* Tracker Container */
+        .tracker-container { display: none; width: 100%; max-width: 100%; display: flex; flex-direction: column; align-items: center; padding-bottom: 80px; }
+        .tracker-container h1 { font-size: 2.5rem; margin-bottom: 30px; text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5); background: linear-gradient(90deg, #64ffda, #48d1cc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 1px; animation: fadeInDown 1.2s ease-out; }
+        .tracker-container form { background: rgba(255, 255, 255, 0.12); border-radius: 16px; padding: 30px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); width: 90%; max-width: 450px; backdrop-filter: blur(12px); animation: slideInUp 1s ease-out; position: relative; border: 1px solid rgba(255, 255, 255, 0.18); transform-style: preserve-3d; perspective: 1000px; transition: transform 0.3s ease; margin-bottom: 30px; }
         .tracker-container form:hover { transform: translateY(-5px) rotateX(2deg); }
-        .tracker-container input[type="text"],
-        .tracker-container input[type="number"] {
-          margin: 15px 0; padding: 16px 20px; border: none; border-radius: 12px; width: calc(100% - 40px); font-size: 1rem; font-family: 'Poppins', sans-serif; background-color: rgba(255, 255, 255, 0.9); color: #001f3f; font-weight: 500; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); outline: 2px solid transparent;
-        }
-        .tracker-container input[type="text"]:focus,
-        .tracker-container input[type="number"]:focus {
-          outline: 2px solid #64ffda; transform: scale(1.02); box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-        }
+        .tracker-container input[type="text"], .tracker-container input[type="number"] { margin: 15px 0; padding: 16px 20px; border: none; border-radius: 12px; width: calc(100% - 40px); font-size: 1rem; font-family: 'Poppins', sans-serif; background-color: rgba(255, 255, 255, 0.9); color: #001f3f; font-weight: 500; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); outline: 2px solid transparent; }
+        .tracker-container input[type="text"]:focus, .tracker-container input[type="number"]:focus { outline: 2px solid #64ffda; transform: scale(1.02); box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15); }
         .tracker-container .file-input-container { position: relative; margin: 15px 0; overflow: hidden; }
         .tracker-container .file-input-label { display: flex; align-items: center; justify-content: center; background: rgba(255, 255, 255, 0.9); color: #001f3f; padding: 16px; border-radius: 12px; text-align: center; cursor: pointer; font-weight: 500; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .tracker-container .file-input-label:before { content: "📸"; margin-right: 10px; font-size: 1.2rem; }
@@ -116,15 +47,15 @@
         .tracker-container .download-button.pdf:hover:not(:disabled) { transform: translateY(-3px) scale(1.02); box-shadow: 0 8px 20px rgba(30, 136, 229, 0.5); }
         .tracker-container .download-button.csv { background: linear-gradient(135deg, #43a047, #1b5e20); box-shadow: 0 4px 15px rgba(67, 160, 71, 0.4); }
         .tracker-container .download-button.csv:hover:not(:disabled) { transform: translateY(-3px) scale(1.02); box-shadow: 0 8px 20px rgba(67, 160, 71, 0.5); }
+        .tracker-container .download-button.whatsapp { background: linear-gradient(135deg, #25D366, #128C7E); box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4); }
+        .tracker-container .download-button.whatsapp:hover:not(:disabled) { transform: translateY(-3px) scale(1.02); box-shadow: 0 8px 20px rgba(18, 140, 126, 0.5); }
         .tracker-container .download-button:disabled { opacity: 0.6; cursor: not-allowed; background: #999; box-shadow: none; transform: none; }
-        .tracker-container .history { margin-top: 40px; width: 90%; max-width: 650px; animation: fadeIn 1.2s ease-out; }
-        .tracker-container .history h2 { font-size: 1.8rem; margin-bottom: 25px; text-align: center; text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); position: relative; display: inline-block; left: 50%; transform: translateX(-50%); }
-        .tracker-container .history h2:after { content: ''; position: absolute; width: 50%; height: 3px; background: linear-gradient(90deg, transparent, #64ffda, transparent); bottom: -8px; left: 25%; }
 
-        /* --- Entry Card Styles (Active) --- */
-        .tracker-container .entry-card {
-          background: rgba(255, 255, 255, 0.12); border-radius: 16px; padding: 20px; margin-bottom: 20px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.18); transform: translateY(0); transition: opacity 0.5s ease, transform 0.5s ease, background-color 0.3s ease; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; position: relative;
-        }
+        /* History Section */
+        .tracker-container .history { margin-top: 40px; width: 90%; max-width: 650px; animation: fadeIn 1.2s ease-out; text-align: center; }
+        .tracker-container .history h2 { font-size: 1.8rem; margin-bottom: 25px; text-align: center; text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); position: relative; display: inline-block; }
+        .tracker-container .history h2:after { content: ''; position: absolute; width: 50%; height: 3px; background: linear-gradient(90deg, transparent, #64ffda, transparent); bottom: -8px; left: 25%; }
+        .tracker-container .entry-card { background: rgba(255, 255, 255, 0.12); border-radius: 16px; padding: 20px; margin: 0 auto 20px auto; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.18); transform: translateY(0); transition: opacity 0.5s ease, transform 0.5s ease, background-color 0.3s ease; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; position: relative; max-width: 100%; text-align: left; }
         .tracker-container .entry-card-info { flex: 1; min-width: calc(60% - 20px); padding-right: 15px; }
         .tracker-container .entry-card-image-container { display: flex; flex-direction: column; align-items: center; justify-content: space-between; margin-left: 15px; flex-basis: 100px; flex-shrink: 0; }
         .tracker-container .entry-card img { max-width: 100px; max-height: 100px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); transition: all 0.3s ease; object-fit: cover; height: auto; display: block; }
@@ -135,42 +66,14 @@
         .tracker-container .delete-button { background: linear-gradient(135deg, #ff758c, #ff4d6d); color: white; border: none; border-radius: 8px; padding: 5px 10px; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(255, 77, 109, 0.4); margin-top: 10px; align-self: center; }
         .tracker-container .delete-button:hover { transform: scale(1.05); box-shadow: 0 4px 12px rgba(255, 77, 109, 0.6); }
         .tracker-container .delete-button:active { transform: scale(0.98); }
-
-        /* --- Entry Card Styles (Deleted) --- */
-        .tracker-container .entry-card-deleted {
-            background: rgba(80, 80, 80, 0.15); /* Darker, less prominent background */
-            border-radius: 16px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2); backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.1); transition: opacity 0.5s ease;
-            opacity: 0.7; /* Slightly faded */
-        }
-        .tracker-container .entry-card-deleted .original-details {
-            text-decoration: line-through; /* Strikethrough original info */
-            opacity: 0.6;
-            font-size: 0.9em;
-            margin-bottom: 10px;
-            border-bottom: 1px dashed rgba(255,255,255,0.2);
-            padding-bottom: 10px;
-        }
-        .tracker-container .entry-card-deleted .original-details p {
-             margin: 4px 0; /* Smaller margin for original details */
-        }
-        .tracker-container .entry-card-deleted .deletion-info {
-            font-size: 0.95em;
-            font-weight: 500;
-            color: #ffb3b3; /* Light red color for deletion info */
-        }
-         .tracker-container .entry-card-deleted .deletion-info p {
-             margin: 5px 0;
-         }
-         .tracker-container .entry-card-deleted .deletion-info strong {
-             color: #ff758c; /* Brighter red for emphasis */
-             font-weight: 600;
-         }
-
-
-        /* Table Section */
+        .tracker-container .entry-card-deleted { background: rgba(80, 80, 80, 0.15); border-radius: 16px; padding: 20px; margin: 0 auto 20px auto; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2); backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.1); transition: opacity 0.5s ease; opacity: 0.7; max-width: 100%; text-align: left; }
+        .tracker-container .entry-card-deleted .original-details { text-decoration: line-through; opacity: 0.6; font-size: 0.9em; margin-bottom: 10px; border-bottom: 1px dashed rgba(255,255,255,0.2); padding-bottom: 10px; }
+        .tracker-container .entry-card-deleted .original-details p { margin: 4px 0; }
+        .tracker-container .entry-card-deleted .deletion-info { font-size: 0.95em; font-weight: 500; color: #ffb3b3; }
+        .tracker-container .entry-card-deleted .deletion-info p { margin: 5px 0; }
+        .tracker-container .entry-card-deleted .deletion-info strong { color: #ff758c; font-weight: 600; }
         .tracker-container table { margin-top: 40px; width: 90%; max-width: 650px; border-collapse: separate; border-spacing: 0; background: rgba(255, 255, 255, 0.12); border-radius: 16px; overflow: hidden; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2); backdrop-filter: blur(12px); animation: fadeIn 1.2s ease-out; margin-bottom: 50px; }
-        .tracker-container table th,
-        .tracker-container table td { padding: 16px; text-align: left; border-bottom: 1px solid rgba(255, 255, 255, 0.1); word-break: break-word; }
+        .tracker-container table th, .tracker-container table td { padding: 16px; text-align: left; border-bottom: 1px solid rgba(255, 255, 255, 0.1); word-break: break-word; }
         .tracker-container table th { background: rgba(255, 255, 255, 0.2); font-weight: 600; letter-spacing: 1px; position: sticky; top: 0; z-index: 1; }
         .tracker-container table th:after { content: ''; position: absolute; left: 0; bottom: 0; width: 100%; height: 2px; background: linear-gradient(90deg, transparent, rgba(100, 255, 218, 0.5), transparent); }
         .tracker-container table tr:last-child td { border-bottom: none; }
@@ -178,8 +81,6 @@
         .tracker-container table tr:hover td { background-color: rgba(255, 255, 255, 0.05); }
         .tracker-container table td:first-child { font-weight: 500; text-transform: capitalize; }
         .tracker-container table td:last-child { font-weight: 600; color: #64ffda; }
-
-        /* Suggestions Dropdown */
         .tracker-container .suggestions { position: absolute; top: calc(100% - 10px); left: 0; width: 100%; max-height: 150px; overflow-y: auto; background: rgba(255, 255, 255, 0.98); border-radius: 0 0 12px 12px; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); z-index: 10; display: none; scrollbar-width: thin; scrollbar-color: #64ffda #001f3f; }
         .tracker-container .suggestions::-webkit-scrollbar { width: 8px; }
         .tracker-container .suggestions::-webkit-scrollbar-track { background: rgba(0, 31, 63, 0.5); border-radius: 10px; }
@@ -188,252 +89,496 @@
         .tracker-container .suggestions div:last-child { border-bottom: none; }
         .tracker-container .suggestions div:hover { background: rgba(100, 255, 218, 0.2); }
 
-         /* --- Footer Styles (Common) --- */
-         .footer { margin-top: 40px; width: 90%; max-width: 650px; text-align: center; font-size: 0.9rem; color: rgba(255, 255, 255, 0.7); background: rgba(255, 255, 255, 0.08); border-radius: 10px; padding: 15px 25px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.3s ease; animation: fadeIn 1.5s ease-out; line-height: 1.5; margin-bottom: 20px; }
-         .footer a { color: #64ffda; text-decoration: none; position: relative; transition: all 0.3s ease; }
-         .footer a:hover { text-shadow: 0 0 10px rgba(100, 255, 218, 0.6); }
-         .footer a::after { content: ''; position: absolute; width: 0; height: 2px; bottom: -3px; left: 0; background: linear-gradient(90deg, #64ffda, #48d1cc); transition: width 0.3s ease; }
-         .footer a:hover::after { width: 100%; }
+        /* Modal Styles (Common) */
+        .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.6); animation: fadeIn 0.3s ease-out; }
+        .modal-content { position: relative; background: linear-gradient(135deg, #002a4c, #004080); margin: 15% auto; padding: 0; border: 1px solid rgba(100, 255, 218, 0.3); border-radius: 16px; width: 80%; max-width: 450px; /* Slightly wider for WA */ box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5); backdrop-filter: blur(5px); animation: slideInUp 0.4s ease-out; }
+        .modal-header { padding: 15px 20px; border-bottom: 1px solid rgba(100, 255, 218, 0.2); position: relative; }
+        .modal-header h2 { margin: 0; font-size: 1.4rem; color: #64ffda; }
+        .close-button { color: #aaa; position: absolute; top: 10px; right: 15px; font-size: 28px; font-weight: bold; line-height: 1; }
+        .close-button:hover, .close-button:focus { color: #fff; text-decoration: none; cursor: pointer; }
+        .modal-body { padding: 20px 25px; font-size: 1.1rem; color: #eee; text-align: center; }
+        .modal-body span { font-size: 1.5em; margin-right: 10px; vertical-align: middle; } /* Emoji styling for success modal */
+        .modal-body p { margin-bottom: 15px; }
+        .modal-body strong { color: #a3f7ff; font-weight: 600; word-break: break-all; } /* For displaying phone number */
+        /* Style for the confirmation button inside the modal */
+        .modal-body .confirm-button {
+             background: linear-gradient(135deg, #25D366, #128C7E);
+             color: white; font-weight: 600; cursor: pointer; padding: 12px 25px; border: none; border-radius: 10px; width: auto; font-size: 1rem; letter-spacing: 1px; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4); transition: all 0.3s ease; margin-top: 15px; font-family: 'Poppins', sans-serif; display: inline-block; /* Allow text-align:center to work */
+        }
+        .modal-body .confirm-button:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(18, 140, 126, 0.5); }
+        .modal-footer { padding: 10px 20px; border-top: 1px solid rgba(100, 255, 218, 0.1); text-align: center; font-family: monospace; font-size: 0.7rem; color: rgba(255, 255, 255, 0.5); }
 
-        /* Enhanced Animations */
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        /* Footer Styles (Common) */
+        .footer { margin-top: 40px; width: 90%; max-width: 650px; text-align: center; font-size: 0.9rem; color: rgba(255, 255, 255, 0.7); background: rgba(255, 255, 255, 0.08); border-radius: 10px; padding: 15px 25px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.3s ease; animation: fadeIn 1.5s ease-out; line-height: 1.5; margin-bottom: 20px; }
+        .footer a { color: #64ffda; text-decoration: none; position: relative; transition: all 0.3s ease; }
+        .footer a:hover { text-shadow: 0 0 10px rgba(100, 255, 218, 0.6); }
+        .footer a::after { content: ''; position: absolute; width: 0; height: 2px; bottom: -3px; left: 0; background: linear-gradient(90deg, #64ffda, #48d1cc); transition: width 0.3s ease; }
+        .footer a:hover::after { width: 100%; }
+
+        /* Animations */
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideInUp { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fadeInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes pulse { from { box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2); } to { box-shadow: 0 8px 32px rgba(100, 255, 218, 0.3); } }
 
         /* Responsive Design */
-        @media (max-width: 600px) {
-          body { padding: 20px 10px; }
-          .login-container { padding: 20px 25px; margin: 20px auto; }
-          .login-container h1 { font-size: 1.6rem; }
-          .tracker-container h1 { font-size: 1.8rem; }
-          .tracker-container form { padding: 20px; }
-          .tracker-container button[type="submit"] { font-size: 1rem; }
-          .tracker-container .download-button { font-size: 0.9rem; padding: 10px 15px; }
-          .tracker-container .history h2 { font-size: 1.5rem; }
-           .tracker-container .entry-card, .tracker-container .entry-card-deleted { padding: 15px; align-items: center; }
-            .tracker-container .entry-card-info { padding-right: 10px; min-width: calc(55% - 10px); }
-            .tracker-container .entry-card-image-container { margin-left: 10px; flex-basis: 80px; }
-            .tracker-container .entry-card img, .tracker-container .no-image-placeholder { max-width: 80px; max-height: 80px; width: 80px; height: 80px; line-height: 80px; }
-           .tracker-container .entry-card p { font-size: 0.9rem; }
-           .tracker-container .entry-card-deleted .original-details,
-           .tracker-container .entry-card-deleted .deletion-info { font-size: 0.85em; }
-          .tracker-container table { font-size: 0.9rem; }
-           .tracker-container table th, .tracker-container table td { padding: 12px; }
-          .tracker-container .total-amount { font-size: 1.2rem; padding: 15px; }
-          .tracker-container .total-amount strong { font-size: 1.4rem; }
-          .footer { font-size: 0.8rem; padding: 10px 15px; }
-          .tracker-container .delete-button { font-size: 0.75rem; padding: 4px 8px;}
-        }
-         @media (min-width: 481px) {
-            .tracker-container .download-buttons-container { flex-direction: row; }
-        }
-
+        @media (max-width: 600px) { body { padding: 20px 10px; } .login-container { padding: 20px 25px; margin: 20px auto; } .login-container h1 { font-size: 1.6rem; } .tracker-container h1 { font-size: 1.8rem; } .tracker-container form { padding: 20px; } .tracker-container button[type="submit"] { font-size: 1rem; } .tracker-container .download-button { font-size: 0.9rem; padding: 10px 15px; } .tracker-container .history h2 { font-size: 1.5rem; } .tracker-container .entry-card, .tracker-container .entry-card-deleted { padding: 15px; align-items: center; } .tracker-container .entry-card-info { padding-right: 10px; min-width: calc(55% - 10px); } .tracker-container .entry-card-image-container { margin-left: 10px; flex-basis: 80px; } .tracker-container .entry-card img, .tracker-container .no-image-placeholder { max-width: 80px; max-height: 80px; width: 80px; height: 80px; line-height: 80px; } .tracker-container .entry-card p { font-size: 0.9rem; } .tracker-container .entry-card-deleted .original-details, .tracker-container .entry-card-deleted .deletion-info { font-size: 0.85em; } .tracker-container table { font-size: 0.9rem; } .tracker-container table th, .tracker-container table td { padding: 12px; } .tracker-container .total-amount { font-size: 1.2rem; padding: 15px; } .tracker-container .total-amount strong { font-size: 1.4rem; } .footer { font-size: 0.8rem; padding: 10px 15px; } .tracker-container .delete-button { font-size: 0.75rem; padding: 4px 8px;} .modal-content { width: 90%; margin: 25% auto; } .modal-header h2 { font-size: 1.2rem;} .modal-body { font-size: 1rem; } .modal-footer { font-size: 0.65rem; } }
+        @media (min-width: 481px) { .tracker-container .download-buttons-container { flex-direction: row; } }
     </style>
 </head>
 <body>
-    <div class="login-container" id="loginSection">
-        <h1>Enter Passcode</h1>
-        <input type="password" id="passcodeInput" placeholder="Enter passcode" autocomplete="current-password">
-        <button onclick="checkPasscode()">Enter Tracker</button>
-        <p id="errorMessage"></p>
+    <div class="login-container" id="loginSection"> <h1>Enter Passcode</h1> <input type="password" id="passcodeInput" placeholder="Enter passcode" autocomplete="current-password"> <button onclick="checkPasscode()">Enter Tracker</button> <p id="errorMessage"></p> </div>
+
+    <div class="tracker-container" id="trackerSection"> <h1>Money Saving Tracker</h1> <form id="trackerForm"> <div style="position: relative;"> <input type="text" id="name" placeholder="Enter Name" required autocomplete="off" /> <div class="suggestions" id="nameSuggestions"></div> </div> <div class="file-input-container"> <label for="receiptImage" class="file-input-label">Choose Receipt Image</label> <input type="file" id="receiptImage" accept="image/*" required /> <div class="file-name" id="fileName">No file chosen</div> </div> <input type="number" id="amount" placeholder="Enter Amount (LKR)" required step="0.01" min="0"/> <button type="submit" id="submitButton">Submit</button> </form> <div class="total-amount" id="totalAmount"> Total Amount Saved: <strong>LKR 0.00</strong> </div> <div class="download-buttons-container"> <button id="downloadPdfButton" class="download-button pdf" disabled>Download Report (PDF)</button> <button id="downloadCsvButton" class="download-button csv" disabled>Download Data (CSV)</button> <button id="sendWhatsAppButton" class="download-button whatsapp" disabled>Send Report (WhatsApp)</button> </div> <div class="history"> <h2>History</h2> <div id="historyList"> </div> </div> <table> <thead> <tr> <th>Name</th> <th>Total Savings (LKR)</th> </tr> </thead> <tbody id="summaryTable"> <tr><td colspan="2" style="text-align: center; font-style: italic; color: #ccc;">Loading data...</td></tr> </tbody> </table> </div>
+
+    <div class="footer"> Current time in Sri Lanka: <span id="currentTime">Loading...</span><br> <a href="https://t.me/MrLAXAN" target="_blank">𝐃𝐞𝐯𝐞𝐥𝐨𝐩𝐞𝐝 𝐛𝐲 𝐋𝐚𝐤𝐬𝐡𝐚𝐧 🚀💻🔥</a> </div>
+
+    <div id="successModal" class="modal"> <div class="modal-content"> <div class="modal-header"> <span class="close-button" id="closeSuccessModal">&times;</span> <h2>Success!</h2> </div> <div class="modal-body"> <p><span>✅</span>Record Submitted Successfully!</p> </div> <div class="modal-footer"> &lt;/&gt;Devolopd by Lakshan </div> </div> </div>
+
+    <div id="whatsAppModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <span class="close-button" id="closeWhatsAppModal">&times;</span>
+          <h2>Confirm WhatsApp Send</h2>
+        </div>
+        <div class="modal-body">
+          <p>Ready to send the report to:</p>
+          <p><strong id="whatsAppConfirmNumber"></strong></p>
+          <button id="confirmWhatsAppSendButton" class="confirm-button">Open WhatsApp</button>
+        </div>
+        <div class="modal-footer">
+           &lt;/&gt;Devolopd by Lakshan
+        </div>
+      </div>
     </div>
 
-    <div class="tracker-container" id="trackerSection">
-      <h1>Money Saving Tracker</h1>
-
-      <form id="trackerForm">
-        <div style="position: relative;">
-          <input type="text" id="name" placeholder="Enter Name" required autocomplete="off" />
-          <div class="suggestions" id="nameSuggestions"></div>
-        </div>
-        <div class="file-input-container">
-          <label for="receiptImage" class="file-input-label">Choose Receipt Image</label>
-          <input type="file" id="receiptImage" accept="image/*" required />
-          <div class="file-name" id="fileName">No file chosen</div>
-        </div>
-        <input type="number" id="amount" placeholder="Enter Amount (LKR)" required step="0.01" min="0"/>
-        <button type="submit" id="submitButton">Submit</button>
-      </form>
-
-      <div class="total-amount" id="totalAmount">
-        Total Amount Saved: <strong>LKR 0.00</strong>
-      </div>
-
-      <div class="download-buttons-container">
-          <button id="downloadPdfButton" class="download-button pdf" disabled>Download Report (PDF)</button>
-          <button id="downloadCsvButton" class="download-button csv" disabled>Download Data (CSV)</button>
-      </div>
-
-      <div class="history">
-        <h2>History</h2>
-        <div id="historyList">
-             </div>
-      </div>
-
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Total Savings (LKR)</th>
-          </tr>
-        </thead>
-        <tbody id="summaryTable">
-          <tr><td colspan="2" style="text-align: center; font-style: italic; color: #ccc;">Loading data...</td></tr>
-        </tbody>
-      </table>
-
-    </div> <div class="footer">
-         Current time in Sri Lanka: <span id="currentTime">Loading...</span><br>
-        <a href="https://t.me/MrLAXAN" target="_blank">𝐃𝐞𝐯𝐞𝐥𝐨𝐩𝐞𝐝 𝐛𝐲 𝐋𝐚𝐤𝐬𝐡𝐚𝐧 🚀💻🔥</a>
-    </div>
 
     <script type="module">
-        // Import Firebase modules
+        // Imports
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-app.js";
-        import { getDatabase, ref, set, onValue, update } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-database.js"; // Replaced 'remove' with 'update'
+        import { getDatabase, ref, set, onValue, update } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-database.js";
 
-        // --- Global Scope Variables ---
+        // Globals
         let trackerInitialized = false;
         let database;
 
-        // --- Passcode Check Logic ---
-        window.checkPasscode = function() { /* ... same as before ... */
+        // Passcode Check
+        window.checkPasscode = function() {
             const correctPasscode = "0720";
             const enteredPasscode = document.getElementById('passcodeInput').value;
             const errorMessage = document.getElementById('errorMessage');
             const loginSection = document.getElementById('loginSection');
             const trackerSection = document.getElementById('trackerSection');
+
             if (enteredPasscode === correctPasscode) {
-                console.log("Passcode correct."); loginSection.style.display = 'none'; trackerSection.style.display = 'flex';
+                console.log("Passcode correct. Attempting to show tracker.");
+                loginSection.style.display = 'none';
+                trackerSection.style.display = 'flex'; // Use flex as per CSS
+                errorMessage.textContent = ''; // Clear error message on success
+
                 if (!trackerInitialized) {
-                    console.log("Initializing tracker."); try { initializeTracker(); trackerInitialized = true; console.log("Tracker initialized."); } catch (initError) { console.error("Tracker init error:", initError); alert("Failed to init tracker."); }
-                } else { console.log("Tracker already initialized."); }
-            } else { console.log("Passcode incorrect."); errorMessage.textContent = 'Incorrect passcode.'; document.getElementById('passcodeInput').value = ''; loginSection.style.display = 'block'; trackerSection.style.display = 'none'; }
+                    console.log("Tracker not initialized. Initializing now...");
+                    try {
+                        initializeTracker(); // Initialize Firebase and load data
+                        trackerInitialized = true;
+                        console.log("Tracker initialized successfully.");
+                    } catch (initError) {
+                        console.error("Critical Error during tracker initialization:", initError);
+                        alert("Failed to initialize the tracker application. Please check the console (F12) for errors.");
+                        // Optionally hide tracker and show login again on critical init failure
+                        loginSection.style.display = 'block';
+                        trackerSection.style.display = 'none';
+                    }
+                } else {
+                    console.log("Tracker already initialized.");
+                    // Optionally trigger a data refresh if needed when logging back in during same session
+                    // loadHistory(); // Uncomment if you want data to refresh every time passcode is entered correctly
+                }
+            } else {
+                console.log("Incorrect passcode entered.");
+                errorMessage.textContent = 'Incorrect passcode. Please try again.';
+                if (document.getElementById('passcodeInput')) {
+                    document.getElementById('passcodeInput').value = ''; // Clear input field
+                    document.getElementById('passcodeInput').focus(); // Set focus back to input
+                }
+                // Ensure tracker is hidden if passcode is wrong
+                loginSection.style.display = 'block';
+                trackerSection.style.display = 'none';
+            }
         }
-        const passcodeInput = document.getElementById('passcodeInput');
-        if (passcodeInput) { passcodeInput.addEventListener('keypress', function(event) { if (event.key === 'Enter') { event.preventDefault(); checkPasscode(); } }); }
+
+        // Success Modal Logic
+        const successModal = document.getElementById("successModal");
+        const closeSuccessModalButton = document.getElementById("closeSuccessModal");
+        function showSuccessModal() { if (successModal) successModal.style.display = "block"; }
+        function hideSuccessModal() { if (successModal) successModal.style.display = "none"; resetFormAndState(); } // Reset form after closing success modal
+        if (closeSuccessModalButton) { closeSuccessModalButton.onclick = hideSuccessModal; }
+
+        // WhatsApp Modal Logic
+        const whatsAppModal = document.getElementById("whatsAppModal");
+        const closeWhatsAppModalButton = document.getElementById("closeWhatsAppModal");
+        const whatsAppConfirmNumberSpan = document.getElementById("whatsAppConfirmNumber");
+        const confirmWhatsAppSendButton = document.getElementById("confirmWhatsAppSendButton");
+
+        function showWhatsAppModal(phoneNumber, url) {
+            if (whatsAppConfirmNumberSpan) whatsAppConfirmNumberSpan.textContent = phoneNumber;
+            if (confirmWhatsAppSendButton) {
+                confirmWhatsAppSendButton.onclick = () => {
+                    console.log(`Opening WhatsApp URL via modal button: ${url}`);
+                    window.open(url, '_blank');
+                    hideWhatsAppModal();
+                };
+            }
+            if (whatsAppModal) whatsAppModal.style.display = "block";
+        }
+
+        function hideWhatsAppModal() {
+            if (whatsAppModal) whatsAppModal.style.display = "none";
+            if (confirmWhatsAppSendButton) confirmWhatsAppSendButton.onclick = null; // Clean up handler
+        }
+        if (closeWhatsAppModalButton) { closeWhatsAppModalButton.onclick = hideWhatsAppModal; }
+
+        // Close modals on background click
+        window.addEventListener('click', function(event) {
+            if (event.target == successModal) { hideSuccessModal(); }
+            else if (event.target == whatsAppModal) { hideWhatsAppModal(); }
+        });
+        // --- End Modal Logic ---
+
 
         // --- Tracker Logic ---
         function initializeTracker() {
-            console.log("Inside initializeTracker.");
-            // Firebase config
-            const firebaseConfig = { apiKey: "AIzaSyD1DbAbZ8yLeJxULV2giceFwzRFM6I-FF0", authDomain: "websavelxn.firebaseapp.com", databaseURL: "https://websavelxn-default-rtdb.firebaseio.com", projectId: "websavelxn", storageBucket: "websavelxn.firebasestorage.app", messagingSenderId: "781394117165", appId: "1:781394117165:web:cf042f7d5de2776222eea4" }; // Replace if needed
-            // Init Firebase
-            try { const app = initializeApp(firebaseConfig); database = getDatabase(app); console.log("Firebase initialized."); } catch (fbError) { console.error("Firebase Init Failed:", fbError); alert("Critical Error: Firebase connection failed."); return; }
-            // ImgBB Key
-            const IMGBB_API_KEY = "c59fd4d2f34bb26b393faaf7affe501f"; // Replace if needed
-            // DOM Elements
-            const trackerForm = document.getElementById("trackerForm"); const historyList = document.getElementById("historyList"); const submitButton = document.getElementById("submitButton"); const totalAmountDisplay = document.getElementById("totalAmount"); const summaryTable = document.getElementById("summaryTable"); const nameInput = document.getElementById("name"); const nameSuggestions = document.getElementById("nameSuggestions"); const receiptImageInput = document.getElementById("receiptImage"); const fileNameDisplay = document.getElementById("fileName"); const downloadPdfButton = document.getElementById("downloadPdfButton"); const downloadCsvButton = document.getElementById("downloadCsvButton"); const currentTimeDisplay = document.getElementById("currentTime");
-            // State Variables
-            let totalAmount = 0; const previousNames = new Set(); let allEntriesData = {}; let allSummaryData = {}; let allRawEntries = [];
+            console.log("Inside initializeTracker function.");
 
-            // --- Current Time ---
-            function updateCurrentTime() { try { const now = new Date(); const options = { timeZone: 'Asia/Colombo', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true }; if(currentTimeDisplay) currentTimeDisplay.textContent = now.toLocaleString('en-US', options); } catch (e) { console.error("Error time:", e); if(currentTimeDisplay) currentTimeDisplay.textContent = "Error"; } } updateCurrentTime(); setInterval(updateCurrentTime, 1000);
+            // ---- Firebase Configuration ----
+            // IMPORTANT: Replace with your actual Firebase config
+            const firebaseConfig = {
+              apiKey: "AIzaSyD1DbAbZ8yLeJxULV2giceFwzRFM6I-FF0", // Replace with your API key
+              authDomain: "websavelxn.firebaseapp.com",         // Replace with your Auth Domain
+              databaseURL: "https://websavelxn-default-rtdb.firebaseio.com", // Replace with your Database URL
+              projectId: "websavelxn",                     // Replace with your Project ID
+              storageBucket: "websavelxn.firebasestorage.app",   // Replace with your Storage Bucket
+              messagingSenderId: "781394117165",         // Replace with your Sender ID
+              appId: "1:781394117165:web:cf042f7d5de2776222eea4"          // Replace with your App ID
+            };
+            // ---- ImgBB Configuration ----
+            // IMPORTANT: Replace with your actual ImgBB API key
+            const IMGBB_API_KEY = "c59fd4d2f34bb26b393faaf7affe501f"; // Replace with your ImgBB Key
+
+            // Initialize Firebase
+            try {
+                const app = initializeApp(firebaseConfig);
+                database = getDatabase(app);
+                console.log("Firebase initialized successfully.");
+            } catch (fbError) {
+                console.error("Firebase Initialization Failed:", fbError);
+                alert("CRITICAL ERROR: Could not connect to Firebase. Check configuration and console (F12).");
+                throw fbError; // Re-throw error to stop further execution in initializeTracker
+            }
+
+            // Get DOM Elements (cache references)
+            const trackerForm = document.getElementById("trackerForm");
+            const historyList = document.getElementById("historyList");
+            const submitButton = document.getElementById("submitButton");
+            const totalAmountDisplay = document.getElementById("totalAmount");
+            const summaryTable = document.getElementById("summaryTable");
+            const nameInput = document.getElementById("name");
+            const nameSuggestions = document.getElementById("nameSuggestions");
+            const receiptImageInput = document.getElementById("receiptImage");
+            const fileNameDisplay = document.getElementById("fileName");
+            const downloadPdfButton = document.getElementById("downloadPdfButton");
+            const downloadCsvButton = document.getElementById("downloadCsvButton");
+            const sendWhatsAppButton = document.getElementById("sendWhatsAppButton");
+            const currentTimeDisplay = document.getElementById("currentTime");
+            const amountInput = document.getElementById("amount"); // Get amount input reference
+
+            // State Variables
+            let totalAmount = 0;
+            const previousNames = new Set();
+            let allEntriesData = {}; // Grouped by name { name: [entry1, entry2] } (active only)
+            let allSummaryData = {}; // { name: totalAmount } (active only)
+            let allRawEntries = [];  // Flat list of all entries from Firebase (sorted, includes deleted)
+
+            // --- Time Update ---
+            function updateCurrentTime() {
+                try {
+                    const now = new Date();
+                    const options = { timeZone: 'Asia/Colombo', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+                    if(currentTimeDisplay) currentTimeDisplay.textContent = now.toLocaleString('en-US', options);
+                } catch (e) {
+                    console.error("Error updating current time:", e);
+                    if(currentTimeDisplay) currentTimeDisplay.textContent = "Error loading time";
+                }
+            }
+            updateCurrentTime();
+            const timeIntervalId = setInterval(updateCurrentTime, 1000); // Store interval ID if needed later
 
             // --- Event Listeners ---
-            if(receiptImageInput) { receiptImageInput.addEventListener("change", function() { if (this.files && this.files[0]) { if(fileNameDisplay) { fileNameDisplay.textContent = this.files[0].name; fileNameDisplay.style.color = "#64ffda"; } } else { if(fileNameDisplay) { fileNameDisplay.textContent = "No file chosen"; fileNameDisplay.style.color = "rgba(255, 255, 255, 0.9)"; } } checkFormValidity(); }); } else { console.error("ID 'receiptImage' not found."); }
-            if (trackerForm) { trackerForm.addEventListener("submit", handleFormSubmit); trackerForm.addEventListener("input", checkFormValidity); } else { console.error("ID 'trackerForm' not found."); }
-            if (nameInput) { nameInput.addEventListener("input", handleNameInput); nameInput.addEventListener("focus", handleNameFocus); } else { console.error("ID 'nameInput' not found."); }
-            document.addEventListener("click", handleDocClickForSuggestions);
-            if (downloadPdfButton) { downloadPdfButton.addEventListener("click", generatePdf); } else { console.error("ID 'downloadPdfButton' not found."); }
-            if (downloadCsvButton) { downloadCsvButton.addEventListener("click", generateCsv); } else { console.error("ID 'downloadCsvButton' not found."); }
+            if (receiptImageInput) {
+                receiptImageInput.addEventListener("change", function() {
+                    if (this.files && this.files[0]) {
+                        if(fileNameDisplay) {
+                            fileNameDisplay.textContent = this.files[0].name;
+                            fileNameDisplay.style.color = "#64ffda"; // Highlight chosen file
+                        }
+                    } else {
+                        if(fileNameDisplay) {
+                            fileNameDisplay.textContent = "No file chosen";
+                            fileNameDisplay.style.color = "rgba(255, 255, 255, 0.9)";
+                        }
+                    }
+                    checkFormValidity(); // Check validity after file change
+                });
+            } else { console.error("Element with ID 'receiptImage' not found."); }
 
-            // *** Delete Button Listener ***
-            if (historyList) {
-                historyList.addEventListener('click', function(event) {
-                    if (event.target.classList.contains('delete-button')) {
-                        const button = event.target;
-                        const timestamp = button.getAttribute('data-timestamp');
-                        const entryCard = button.closest('.entry-card');
-                        const entryNameElem = entryCard ? entryCard.querySelector('.entry-card-info p:first-child') : null;
-                        const entryNameText = entryNameElem ? entryNameElem.textContent : 'this entry';
-
-                        if (timestamp) {
-                            if (confirm(`Mark ${entryNameText} as deleted? You'll need to provide your name and a reason.`)) {
-                                // Get deleter name and reason
-                                const deleterName = prompt("Please enter your name:");
-                                if (deleterName === null || deleterName.trim() === "") {
-                                     alert("Deletion cancelled: Your name is required.");
-                                     console.log("Deletion cancelled by user (missing name).");
-                                     return;
-                                }
-                                const deletionReason = prompt(`Reason for deleting ${entryNameText}?`);
-                                if (deletionReason === null) { // Allow empty reason, but not cancelled prompt
-                                     alert("Deletion cancelled.");
-                                     console.log("Deletion cancelled by user (reason prompt).");
-                                     return;
-                                }
-
-                                console.log(`Attempting to mark as deleted: ${timestamp}, By: ${deleterName}, Reason: ${deletionReason}`);
-                                markEntryAsDeleted(timestamp, deleterName.trim(), deletionReason.trim());
-                            } else {
-                                console.log("Deletion marking cancelled by user.");
-                            }
-                        } else { console.error("Delete button missing timestamp."); }
+            if (trackerForm) {
+                trackerForm.addEventListener("submit", handleFormSubmit);
+                // Also check validity on input changes in text/number fields
+                trackerForm.addEventListener("input", (event) => {
+                    if (event.target.id === 'name' || event.target.id === 'amount') {
+                        checkFormValidity();
                     }
                 });
-            } else { console.error("ID 'historyList' not found."); }
+            } else { console.error("Element with ID 'trackerForm' not found."); }
+
+            if (nameInput) {
+                nameInput.addEventListener("input", handleNameInput);
+                nameInput.addEventListener("focus", handleNameFocus);
+            } else { console.error("Element with ID 'nameInput' not found."); }
+
+            // Hide suggestions when clicking outside
+            document.addEventListener("click", handleDocClickForSuggestions);
+
+            if (downloadPdfButton) { downloadPdfButton.addEventListener("click", generatePdf); }
+            else { console.error("Element with ID 'downloadPdfButton' not found."); }
+
+            if (downloadCsvButton) { downloadCsvButton.addEventListener("click", generateCsv); }
+            else { console.error("Element with ID 'downloadCsvButton' not found."); }
+
+            if (historyList) { historyList.addEventListener('click', handleDeleteClick); }
+            else { console.error("Element with ID 'historyList' not found."); }
+
+            if (sendWhatsAppButton) { sendWhatsAppButton.addEventListener('click', handleSendWhatsApp); }
+            else { console.error("Element with ID 'sendWhatsAppButton' not found.");}
 
             // --- Core Functions ---
-            async function uploadImage(file) { /* ... same as before ... */
-                 const formData = new FormData(); formData.append("image", file); formData.append("key", IMGBB_API_KEY); try { const response = await fetch("https://api.imgbb.com/1/upload", { method: "POST", body: formData }); const data = await response.json(); if (!data.success) { throw new Error("ImgBB upload failed: " + (data.error?.message || data.status_code || "Unknown error")); } console.log("ImgBB Upload ok:", data.data.url); return data.data.url; } catch (error) { console.error("ImgBB Error:", error); alert(`Image upload failed: ${error.message}.`); throw error; }
-            }
-            function saveEntry(name, imageUrl, amount) { /* ... same as before ... */
-                if (!database) { console.error("DB not ready for save."); return; } const timestamp = Date.now(); const entryPath = `entries/${timestamp}`; const entryRef = ref(database, entryPath); set(entryRef, { name: name.trim().toLowerCase(), imageUrl, amount: parseFloat(amount), timestamp, isDeleted: false }) .then(() => console.log("Save ok:", name)).catch(error => { console.error("Save error:", error); alert("Failed to save."); });
+
+            // Upload Image to ImgBB
+            async function uploadImage(file) {
+                const formData = new FormData();
+                formData.append("image", file);
+                formData.append("key", IMGBB_API_KEY);
+                console.log("Attempting to upload image to ImgBB...");
+                try {
+                    const response = await fetch("https://api.imgbb.com/1/upload", { method: "POST", body: formData });
+                    const data = await response.json();
+                    if (!response.ok || !data.success) {
+                        // Improved error message from ImgBB response
+                        const errorMsg = data.error?.message || `HTTP status ${response.status}`;
+                        throw new Error(`ImgBB upload failed: ${errorMsg} (Status code: ${data.status_code || response.status})`);
+                    }
+                    console.log("ImgBB upload successful:", data.data.url);
+                    return data.data.url;
+                } catch (error) {
+                    console.error("Error during ImgBB image upload:", error);
+                    alert(`Image upload failed: ${error.message}. Please check the console (F12) for details.`);
+                    throw error; // Re-throw to stop form submission
+                }
             }
 
-            // *** Mark Entry As Deleted Function ***
-            function markEntryAsDeleted(timestamp, deleterName, deletionReason) {
-                if (!database) { console.error("DB not ready for delete mark."); alert("Error: DB connection failed."); return; }
-                if (!timestamp || !deleterName) { console.error("Invalid data for delete mark."); alert("Error: Missing info for deletion."); return; }
-
-                const entryRef = ref(database, `entries/${timestamp}`);
-                const deletionData = {
-                    isDeleted: true,
-                    deletedBy: deleterName,
-                    deletionReason: deletionReason,
-                    deletionTimestamp: Date.now()
+            // Save Entry to Firebase
+            function saveEntry(name, imageUrl, amount) {
+                if (!database) {
+                    console.error("Database not initialized. Cannot save entry.");
+                    return Promise.reject(new Error("Database connection not ready"));
+                }
+                const timestamp = Date.now();
+                const entryPath = `entries/${timestamp}`;
+                const entryRef = ref(database, entryPath);
+                const entryData = {
+                    name: name.trim().toLowerCase(), // Save name consistently
+                    imageUrl,
+                    amount: parseFloat(amount),
+                    timestamp,
+                    isDeleted: false // Explicitly set isDeleted to false
                 };
-
-                update(entryRef, deletionData)
+                console.log("Attempting to save entry to Firebase:", entryData);
+                return set(entryRef, entryData)
                     .then(() => {
-                        console.log(`Successfully marked entry ${timestamp} as deleted.`);
-                        // UI update happens via onValue listener
+                        console.log("Firebase entry saved successfully:", entryPath);
                     })
-                    .catch((error) => {
-                        console.error(`Error marking entry ${timestamp} as deleted:`, error);
-                        alert("Failed to mark the entry as deleted. Please try again.");
+                    .catch(error => {
+                        console.error("Firebase save entry failed:", error);
+                        alert(`Failed to save data to database: ${error.message}. Check Firebase rules and console (F12).`);
+                        throw error; // Re-throw
                     });
             }
 
-            function loadHistory() { /* ... modified to skip deleted items in totals ... */
-                console.log("Loading history.");
-                if (!database) { console.error("DB not initialized."); if(historyList) historyList.innerHTML = '<p>Error: DB connection failed.</p>'; return; }
-                const entriesRef = ref(database, "entries");
-                onValue(entriesRef, (snapshot) => {
-                  console.log("Firebase onValue trigger.");
-                  if(historyList) historyList.innerHTML = ""; totalAmount = 0; const summaryData = {}; const entriesGroupedByName = {}; let rawEntriesList = []; previousNames.clear();
-                  try {
-                    const entries = snapshot.val();
-                    if (entries) { console.log(`Found ${Object.keys(entries).length} raw entries.`); const sortedEntries = Object.values(entries).filter(entry => entry && typeof entry.name === 'string' && typeof entry.timestamp === 'number' && typeof entry.amount === 'number').sort((a, b) => b.timestamp - a.timestamp); rawEntriesList = [...sortedEntries]; sortedEntries.forEach((entry, index) => { try {
-                        // *** Check if deleted before adding to totals/summary ***
-                        if (!entry.isDeleted) {
-                             const amountValue = parseFloat(entry.amount) || 0; totalAmount += amountValue; const name = entry.name.trim().toLowerCase(); previousNames.add(name); if (!summaryData[name]) { summaryData[name] = 0; entriesGroupedByName[name] = []; } summaryData[name] += amountValue; entriesGroupedByName[name].push({ amount: amountValue, timestamp: entry.timestamp, imageUrl: entry.imageUrl || null });
-                         }
-                         // *** Always add to history display (deleted or not) ***
-                         addEntryToHistory(entry);
-                     } catch(entryProcessError) { console.error(`Error processing entry ${index}:`, entry, entryProcessError); } }); for(const name in entriesGroupedByName) { if(entriesGroupedByName.hasOwnProperty(name)) entriesGroupedByName[name].sort((a, b) => b.timestamp - a.timestamp); } }
-                    else { console.log("No entries found."); if(historyList) historyList.innerHTML = '<p>No history entries found.</p>'; }
-                    allEntriesData = entriesGroupedByName; allSummaryData = summaryData; allRawEntries = rawEntriesList; if(totalAmountDisplay) totalAmountDisplay.innerHTML = `Total Amount Saved: <strong>LKR ${totalAmount.toFixed(2)}</strong>`; updateSummaryTable(summaryData); const hasActiveData = Object.keys(allSummaryData).length > 0; if(downloadPdfButton) downloadPdfButton.disabled = !hasActiveData; if(downloadCsvButton) downloadCsvButton.disabled = !hasActiveData; console.log("History processed. Total (active):", totalAmount);
-                  } catch (processingError) { console.error("Error processing snapshot:", processingError); if(historyList) historyList.innerHTML = '<p>Error processing history.</p>'; if(totalAmountDisplay) totalAmountDisplay.innerHTML = `Total: <strong>LKR 0.00</strong>`; updateSummaryTable({}); if(downloadPdfButton) downloadPdfButton.disabled = true; if(downloadCsvButton) downloadCsvButton.disabled = true; }
-                }, (error) => { console.error("Firebase read error:", error); alert("Could not load data."); allEntriesData = {}; allSummaryData = {}; allRawEntries = []; if(totalAmountDisplay) totalAmountDisplay.innerHTML = `Total: <strong>LKR 0.00</strong>`; updateSummaryTable({}); if(historyList) historyList.innerHTML = '<p>Error loading history.</p>'; if(downloadPdfButton) downloadPdfButton.disabled = true; if(downloadCsvButton) downloadCsvButton.disabled = true; });
+            // Mark Entry as Deleted in Firebase
+            function markEntryAsDeleted(timestamp, deleterName, deletionReason) {
+                 if (!database) {
+                     console.error("Database not initialized. Cannot mark as deleted.");
+                     alert("Error: Database connection lost. Cannot delete entry.");
+                     return;
+                 }
+                 if (!timestamp || !deleterName) { // Reason is optional, but deleterName is important
+                     console.error("Invalid data for marking deletion: Timestamp or Deleter Name missing.");
+                     alert("Error: Missing information required for deletion log.");
+                     return;
+                 }
+                 const entryRef = ref(database, `entries/${timestamp}`);
+                 const deletionData = {
+                     isDeleted: true,
+                     deletedBy: deleterName, // Log who deleted it
+                     deletionReason: deletionReason || '(No reason provided)', // Log reason or default
+                     deletionTimestamp: Date.now() // Log when it was deleted
+                 };
+                 console.log(`Attempting to mark entry ${timestamp} as deleted with data:`, deletionData);
+                 update(entryRef, deletionData)
+                     .then(() => {
+                         console.log(`Entry ${timestamp} marked as deleted successfully.`);
+                         // History will update automatically via onValue listener
+                     })
+                     .catch((error) => {
+                         console.error(`Error marking entry ${timestamp} as deleted:`, error);
+                         alert(`Failed to mark entry as deleted: ${error.message}. Check Firebase rules and console (F12).`);
+                     });
             }
 
-            // *** Modify addEntryToHistory to handle deleted state ***
+            // Load and Display History from Firebase
+            function loadHistory() {
+                console.log("Setting up Firebase onValue listener for history...");
+                if (!database) {
+                    console.error("Database not initialized. Cannot load history.");
+                    if(historyList) historyList.innerHTML = '<p style="color: red;">Error: Database connection failed.</p>';
+                    return;
+                }
+
+                const entriesRef = ref(database, "entries");
+                onValue(entriesRef, (snapshot) => {
+                    console.log("Firebase onValue event triggered. Processing snapshot...");
+                    // Reset state before processing
+                    if(historyList) historyList.innerHTML = ""; // Clear previous list
+                    totalAmount = 0;
+                    const currentSummaryData = {};
+                    const currentEntriesGroupedByName = {};
+                    let currentRawEntries = [];
+                    previousNames.clear();
+
+                    try {
+                        const entries = snapshot.val();
+                        if (entries) {
+                            // Convert object to array and sort by timestamp descending
+                            currentRawEntries = Object.entries(entries)
+                                // Add key (timestamp) to the entry object for easier access if needed
+                                .map(([key, value]) => ({ ...value, firebaseKey: key })) 
+                                .filter(e => e && typeof e.name === 'string' && typeof e.timestamp === 'number' && typeof e.amount === 'number') // Basic validation
+                                .sort((a, b) => b.timestamp - a.timestamp); // Sort newest first
+
+                            console.log(`Processing ${currentRawEntries.length} valid entries from Firebase.`);
+
+                            currentRawEntries.forEach((entry, index) => {
+                                try { // *** Add try-catch for individual entry processing ***
+                                    if (!entry.isDeleted) {
+                                        const amountValue = parseFloat(entry.amount) || 0;
+                                        totalAmount += amountValue;
+                                        const name = entry.name.trim().toLowerCase();
+                                        previousNames.add(name); // Add to suggestions set
+
+                                        // Initialize summary/grouping if not present
+                                        if (!currentSummaryData[name]) {
+                                            currentSummaryData[name] = 0;
+                                            currentEntriesGroupedByName[name] = [];
+                                        }
+                                        currentSummaryData[name] += amountValue;
+                                        currentEntriesGroupedByName[name].push({
+                                            amount: amountValue,
+                                            timestamp: entry.timestamp,
+                                            imageUrl: entry.imageUrl || null
+                                        });
+                                    }
+                                    // Add card to history list (both active and deleted)
+                                    addEntryToHistory(entry);
+                                } catch (entryProcessingError) {
+                                    console.error(`Error processing entry at index ${index} (Timestamp: ${entry.timestamp || 'N/A'}):`, entryProcessingError, "Entry data:", entry);
+                                    // Optionally add an error placeholder to historyList for this entry
+                                    if(historyList) {
+                                        const errorCard = document.createElement('div');
+                                        errorCard.className = 'entry-card-deleted'; // Style as deleted/error
+                                        errorCard.innerHTML = `<p style="color: #ffcccc;">Error displaying this entry (Timestamp: ${entry.timestamp || 'N/A'}). Check console.</p>`;
+                                        historyList.appendChild(errorCard); // Append instead of prepend for errors? Or prepend as well.
+                                    }
+                                }
+                            });
+
+                            // Sort entries within each name group (if needed elsewhere, already sorted in raw list)
+                            // for (const name in currentEntriesGroupedByName) {
+                            //     currentEntriesGroupedByName[name].sort((a, b) => b.timestamp - a.timestamp);
+                            // }
+
+                        } else {
+                            console.log("No entries found in Firebase snapshot.");
+                            if(historyList) historyList.innerHTML = '<p>No history entries found.</p>';
+                        }
+
+                        // Update global state *after* successful processing
+                        allEntriesData = currentEntriesGroupedByName;
+                        allSummaryData = currentSummaryData;
+                        allRawEntries = currentRawEntries; // Update raw list
+
+                        // Update UI
+                        if(totalAmountDisplay) totalAmountDisplay.innerHTML = `Total Amount Saved: <strong>LKR ${totalAmount.toFixed(2)}</strong>`;
+                        updateSummaryTable(allSummaryData);
+
+                        // Update download buttons based on data availability
+                        const hasActiveData = Object.keys(allSummaryData).length > 0;
+                        const hasAnyData = allRawEntries.length > 0;
+                        if(downloadPdfButton) downloadPdfButton.disabled = !hasActiveData;
+                        if(downloadCsvButton) downloadCsvButton.disabled = !hasAnyData; // Enable CSV if any data exists
+                        if(sendWhatsAppButton) sendWhatsAppButton.disabled = !hasActiveData;
+
+                        console.log("History processing complete. Total active amount:", totalAmount.toFixed(2));
+
+                    } catch (snapshotProcessingError) {
+                        console.error("Error processing Firebase snapshot:", snapshotProcessingError);
+                        if(historyList) historyList.innerHTML = '<p style="color: red;">Error processing history data. Check console (F12).</p>';
+                        // Reset UI on error
+                        if(totalAmountDisplay) totalAmountDisplay.innerHTML = `Total Amount Saved: <strong>LKR 0.00</strong>`;
+                        updateSummaryTable({});
+                        if(downloadPdfButton) downloadPdfButton.disabled = true;
+                        if(downloadCsvButton) downloadCsvButton.disabled = true;
+                        if(sendWhatsAppButton) sendWhatsAppButton.disabled = true;
+                    }
+                }, (error) => {
+                    // --- Enhanced Firebase read error handling ---
+                    console.error("Firebase read error:", error);
+                    alert(`Failed to load data from database: ${error.message}. Check Firebase rules, configuration, and console (F12).`);
+                    // Reset state and UI on read error
+                    allEntriesData = {};
+                    allSummaryData = {};
+                    allRawEntries = [];
+                    if(historyList) historyList.innerHTML = `<p style="color: red;">Error loading history: ${error.message}.</p>`;
+                    if(totalAmountDisplay) totalAmountDisplay.innerHTML = `Total Amount Saved: <strong>LKR 0.00</strong>`;
+                    updateSummaryTable({});
+                    if(downloadPdfButton) downloadPdfButton.disabled = true;
+                    if(downloadCsvButton) downloadCsvButton.disabled = true;
+                    if(sendWhatsAppButton) sendWhatsAppButton.disabled = true;
+                });
+            }
+
+            // Add Single Entry to History List (DOM Manipulation)
             function addEntryToHistory(entry) {
-                try {
-                    if(!historyList) { console.error("historyList not found"); return; }
+                try { // Add try-catch around DOM manipulation
+                    if(!historyList) {
+                        console.error("Cannot add entry to history: historyList element not found.");
+                        return;
+                    }
+                    // --- Validate essential entry data for display ---
+                    if (!entry || typeof entry.name !== 'string' || typeof entry.amount !== 'number' || typeof entry.timestamp !== 'number') {
+                        console.warn("Skipping adding entry to history due to missing/invalid data:", entry);
+                        // Optionally add a placeholder indicating a bad entry was skipped
+                        return;
+                    }
 
                     const entryCard = document.createElement("div");
                     const displayName = entry.name.charAt(0).toUpperCase() + entry.name.slice(1);
@@ -441,48 +586,41 @@
                     const originalEntryDate = new Date(entry.timestamp).toLocaleString('en-LK', { timeZone: 'Asia/Colombo' });
 
                     if (entry.isDeleted) {
-                        // --- Render Deleted Card ---
+                        // --- Deleted Entry Card ---
                         entryCard.classList.add("entry-card-deleted");
-
-                        // Original details (struck through)
                         const originalDetailsDiv = document.createElement("div");
                         originalDetailsDiv.classList.add("original-details");
-                        originalDetailsDiv.innerHTML = `
-                            <p><strong>Name:</strong> ${displayName}</p>
-                            <p><strong>Amount:</strong> LKR ${entryAmount}</p>
-                            <p><strong>Original Date:</strong> ${originalEntryDate}</p>
-                        `;
+                        originalDetailsDiv.innerHTML = `<p><strong>Name:</strong> ${displayName}</p><p><strong>Amount:</strong> LKR ${entryAmount}</p><p><strong>Original Date:</strong> ${originalEntryDate}</p>`;
 
-                        // Deletion info
                         const deletionInfoDiv = document.createElement("div");
                         deletionInfoDiv.classList.add("deletion-info");
                         const deletionDate = entry.deletionTimestamp ? new Date(entry.deletionTimestamp).toLocaleString('en-LK', { timeZone: 'Asia/Colombo' }) : 'N/A';
-                        const reasonText = entry.deletionReason ? entry.deletionReason : '(No reason provided)';
-                        deletionInfoDiv.innerHTML = `
-                            <p>Deleted by: <strong>${entry.deletedBy || 'Unknown'}</strong> on ${deletionDate}</p>
-                            <p>Reason: <em>${reasonText}</em></p>
-                        `;
+                        // Sanitize reason slightly (optional)
+                        const reasonText = entry.deletionReason ? String(entry.deletionReason).replace(/</g, "&lt;").replace(/>/g, "&gt;") : '(No reason provided)';
+                        deletionInfoDiv.innerHTML = `<p>Deleted by: <strong>${entry.deletedBy || 'Unknown'}</strong> on ${deletionDate}</p><p>Reason: <em>${reasonText}</em></p>`;
 
                         entryCard.appendChild(originalDetailsDiv);
                         entryCard.appendChild(deletionInfoDiv);
-
                     } else {
-                        // --- Render Active Card ---
+                        // --- Active Entry Card ---
                         entryCard.classList.add("entry-card");
-
                         const infoDiv = document.createElement("div");
                         infoDiv.classList.add("entry-card-info");
                         infoDiv.innerHTML = `<p><strong>Name:</strong> ${displayName}</p><p><strong>Amount:</strong> LKR ${entryAmount}</p><p><strong>Date:</strong> ${originalEntryDate}</p>`;
 
                         const imageContainerDiv = document.createElement("div");
                         imageContainerDiv.classList.add("entry-card-image-container");
-                        const imageHtml = entry.imageUrl ? `<img src="${entry.imageUrl}" alt="Receipt" loading="lazy" />` : '<div class="no-image-placeholder">(No Image)</div>';
+                        // Add error handling for image loading
+                        const imageHtml = entry.imageUrl
+                            ? `<img src="${entry.imageUrl}" alt="Receipt for ${displayName}" loading="lazy" onerror="this.parentElement.innerHTML = '<div class=\\'no-image-placeholder\\'>(Image Error)</div>';" />`
+                            : '<div class="no-image-placeholder">(No Image)</div>';
                         imageContainerDiv.innerHTML = imageHtml;
 
+                        // Delete button for active entries
                         const deleteButton = document.createElement("button");
                         deleteButton.classList.add("delete-button");
                         deleteButton.textContent = "Delete";
-                        deleteButton.setAttribute('data-timestamp', entry.timestamp);
+                        deleteButton.setAttribute('data-timestamp', entry.timestamp); // Use timestamp as identifier
                         deleteButton.setAttribute('title', 'Mark this entry as deleted');
                         imageContainerDiv.appendChild(deleteButton);
 
@@ -490,62 +628,328 @@
                         entryCard.appendChild(imageContainerDiv);
                     }
 
-                    historyList.prepend(entryCard); // Add card
+                    // Add card to the top of the list with animation
+                    historyList.prepend(entryCard);
+                    // Animation (optional, keep if desired)
+                    requestAnimationFrame(() => {
+                        entryCard.style.opacity = "0";
+                        entryCard.style.transform = "translateY(-20px)";
+                        requestAnimationFrame(() => {
+                            entryCard.style.opacity = "1";
+                            entryCard.style.transform = "translateY(0)";
+                        });
+                    });
 
-                    // Animation
-                    requestAnimationFrame(() => { entryCard.style.opacity = "0"; entryCard.style.transform = "translateY(-20px)"; requestAnimationFrame(() => { entryCard.style.opacity = "1"; entryCard.style.transform = "translateY(0)"; }); });
-
-                 } catch (domError) { console.error("Error adding entry card:", entry, domError); }
+                } catch (domError) {
+                    console.error("Error adding entry card to DOM:", domError, "Entry data:", entry);
+                    // Avoid breaking the entire history display if one card fails
+                }
             }
 
+            // Update Summary Table (DOM Manipulation)
+            function updateSummaryTable(summaryData) {
+                 try { // Add try-catch for table update
+                    if(!summaryTable) {
+                        console.error("Cannot update summary table: summaryTable element not found.");
+                        return;
+                    }
+                    summaryTable.innerHTML = ""; // Clear previous content
+                    const sortedNames = Object.keys(summaryData).sort((a, b) => a.localeCompare(b)); // Sort alphabetically
 
-            function updateSummaryTable(summaryData) { /* ... same as before (only shows active totals) ... */
-                 try { if(!summaryTable) { console.error("summaryTable not found"); return; } summaryTable.innerHTML = ""; const sortedNames = Object.keys(summaryData).sort(); if (sortedNames.length === 0) { summaryTable.innerHTML = `<tr><td colspan="2">No summary data.</td></tr>`; } else { sortedNames.forEach(name => { const total = summaryData[name]; const row = document.createElement("tr"); const displayName = name.charAt(0).toUpperCase() + name.slice(1); row.innerHTML = `<td>${displayName}</td><td>LKR ${total.toFixed(2)}</td>`; summaryTable.appendChild(row); }); } } catch (tableError) { console.error("Error update table:", tableError); }
+                    if (sortedNames.length === 0) {
+                        summaryTable.innerHTML = `<tr><td colspan="2" style="text-align: center; font-style: italic; color: #ccc;">No summary available.</td></tr>`;
+                    } else {
+                        sortedNames.forEach(name => {
+                            const total = summaryData[name];
+                            const row = document.createElement("tr");
+                            const displayName = name.charAt(0).toUpperCase() + name.slice(1);
+                            // Ensure total is a number before formatting
+                            const formattedTotal = (typeof total === 'number' ? total.toFixed(2) : 'Error');
+                            row.innerHTML = `<td>${displayName}</td><td>LKR ${formattedTotal}</td>`;
+                            summaryTable.appendChild(row);
+                        });
+                    }
+                 } catch (tableError) {
+                     console.error("Error updating summary table:", tableError);
+                     if(summaryTable) {
+                         summaryTable.innerHTML = `<tr><td colspan="2" style="text-align: center; color: red;">Error loading summary. Check console (F12).</td></tr>`;
+                     }
+                 }
             }
-            function checkFormValidity() { /* ... same as before ... */
-                if (!nameInput || !receiptImageInput || !submitButton) return; const name = nameInput.value.trim(); const receiptImage = receiptImageInput.files[0]; const amountElem = document.getElementById("amount"); const amount = amountElem ? amountElem.value.trim() : ""; const isValidAmount = amount && !isNaN(parseFloat(amount)) && parseFloat(amount) >= 0; const isValidName = name && !/\d/.test(name); submitButton.classList.toggle('enabled', isValidName && receiptImage && isValidAmount);
+
+            // Check Form Validity to Enable/Disable Submit Button
+            function checkFormValidity() {
+                try {
+                    if (!nameInput || !receiptImageInput || !amountInput || !submitButton) {
+                         console.warn("Form validity check skipped: one or more form elements not found.");
+                         return; // Should not happen if elements exist
+                    }
+                    const name = nameInput.value.trim();
+                    const receiptImage = receiptImageInput.files[0];
+                    const amount = amountInput.value.trim();
+
+                    // Validation logic
+                    const isValidAmount = amount && !isNaN(parseFloat(amount)) && parseFloat(amount) >= 0;
+                    const isValidName = name && !/\d/.test(name); // Check if name exists and does not contain digits
+
+                    const isFormValid = isValidName && receiptImage && isValidAmount;
+
+                    // Toggle button state
+                    submitButton.classList.toggle('enabled', isFormValid);
+                    submitButton.disabled = !isFormValid; // Directly set disabled property
+
+                } catch (validationError) {
+                    console.error("Error during form validity check:", validationError);
+                    if(submitButton) {
+                        submitButton.classList.remove('enabled'); // Ensure button is disabled on error
+                        submitButton.disabled = true;
+                    }
+                }
             }
-            async function handleFormSubmit(e) { /* ... same as before ... */
-                 e.preventDefault(); if (!submitButton || !submitButton.classList.contains('enabled')) { return; } if (!nameInput || !receiptImageInput) return; const amountElem = document.getElementById("amount"); if (!amountElem) return; const name = nameInput.value.trim(); const receiptImage = receiptImageInput.files[0]; const amount = amountElem.value.trim(); if (!name || /\d/.test(name) || !receiptImage || !amount || isNaN(parseFloat(amount)) || parseFloat(amount) < 0) { alert("Fill all fields."); return; } submitButton.innerHTML = "Saving..."; submitButton.disabled = true; submitButton.classList.remove('enabled'); try { const imageUrl = await uploadImage(receiptImage); saveEntry(name, imageUrl, amount); setTimeout(() => { submitButton.innerHTML = "Submit"; submitButton.disabled = false; checkFormValidity(); }, 500); if(trackerForm) trackerForm.reset(); if(fileNameDisplay) { fileNameDisplay.textContent = "No file chosen"; fileNameDisplay.style.color = "rgba(255, 255, 255, 0.9)"; } if(nameSuggestions) nameSuggestions.style.display = 'none'; } catch (error) { console.error("Submit error:", error); submitButton.innerHTML = "Submit"; submitButton.disabled = false; checkFormValidity(); }
+
+            // Handle Form Submission
+            async function handleFormSubmit(e) {
+                e.preventDefault(); // Prevent default HTML form submission
+                if (!submitButton || submitButton.disabled) { // Check if button is disabled
+                    console.log("Submit ignored: Button is disabled.");
+                    return;
+                }
+                // Ensure elements exist (redundant check, but safe)
+                if (!nameInput || !receiptImageInput || !amountInput) {
+                     console.error("Cannot submit form: Input elements not found.");
+                     return;
+                }
+
+                const name = nameInput.value.trim();
+                const receiptImage = receiptImageInput.files[0];
+                const amount = amountInput.value.trim();
+
+                // Re-validate just before submission (belt and braces)
+                 const isValidAmount = amount && !isNaN(parseFloat(amount)) && parseFloat(amount) >= 0;
+                 const isValidName = name && !/\d/.test(name);
+                 if (!isValidName || !receiptImage || !isValidAmount) {
+                     alert("Please fill all fields correctly:\n- Name (no numbers)\n- Choose Receipt Image\n- Amount (0 or positive number)");
+                     checkFormValidity(); // Ensure button state reflects current validity
+                     return;
+                 }
+
+                // Disable button and show loading state
+                submitButton.innerHTML = "Saving...";
+                submitButton.disabled = true;
+                submitButton.classList.remove('enabled');
+
+                try {
+                    console.log("Form submitted. Uploading image...");
+                    const imageUrl = await uploadImage(receiptImage);
+                    console.log("Image uploaded. Saving entry...");
+                    await saveEntry(name, imageUrl, amount);
+                    console.log("Entry saved successfully.");
+                    showSuccessModal(); // Show success feedback (which will then call resetFormAndState)
+                } catch (error) {
+                    console.error("Submission process failed:", error);
+                    // Alert message is already shown in uploadImage/saveEntry, no need for another generic one
+                    // Re-enable button and reset text on failure
+                    submitButton.innerHTML = "Submit";
+                    submitButton.disabled = false; // Re-enable
+                    checkFormValidity(); // Re-check validity (likely still invalid if error occurred, but good practice)
+                }
             }
-            function handleNameInput() { /* ... same as before ... */
-                 if (!nameInput || !nameSuggestions) return; const inputText = nameInput.value.trim().toLowerCase(); nameSuggestions.innerHTML = ""; if (inputText.length > 0 && previousNames.size > 0) { const filteredNames = Array.from(previousNames).filter(name => name.toLowerCase().includes(inputText)).sort(); if (filteredNames.length > 0) { nameSuggestions.style.display = "block"; filteredNames.forEach((name) => { const suggestionDiv = document.createElement("div"); suggestionDiv.textContent = name.charAt(0).toUpperCase() + name.slice(1); suggestionDiv.addEventListener("click", () => { nameInput.value = name.charAt(0).toUpperCase() + name.slice(1); nameSuggestions.style.display = "none"; checkFormValidity(); nameInput.focus(); }); nameSuggestions.appendChild(suggestionDiv); }); } else { nameSuggestions.style.display = "none"; } } else { nameSuggestions.style.display = "none"; }
+
+            // Reset Form Fields and State
+            function resetFormAndState() {
+                console.log("Resetting form fields and file display.");
+                try {
+                    if(trackerForm) trackerForm.reset(); // Resets name, amount, file input
+                    if(fileNameDisplay) {
+                        fileNameDisplay.textContent = "No file chosen";
+                        fileNameDisplay.style.color = "rgba(255, 255, 255, 0.9)";
+                    }
+                    if(nameSuggestions) nameSuggestions.style.display = 'none'; // Hide suggestions
+                    // Re-check form validity to correctly disable the submit button
+                    checkFormValidity();
+                } catch (resetError) {
+                    console.error("Error resetting form state:", resetError);
+                }
             }
-            function handleNameFocus() { /* ... same as before ... */
-                 if (!nameInput || !nameSuggestions) return; const inputText = nameInput.value.trim().toLowerCase(); if (inputText.length === 0 && previousNames.size > 0) { nameSuggestions.innerHTML = ""; nameSuggestions.style.display = "block"; const sortedNames = Array.from(previousNames).sort(); sortedNames.forEach((name) => { const suggestionDiv = document.createElement("div"); suggestionDiv.textContent = name.charAt(0).toUpperCase() + name.slice(1); suggestionDiv.addEventListener("click", () => { nameInput.value = name.charAt(0).toUpperCase() + name.slice(1); nameSuggestions.style.display = "none"; checkFormValidity(); nameInput.focus(); }); nameSuggestions.appendChild(suggestionDiv); }); } else if (inputText.length > 0) { nameInput.dispatchEvent(new Event('input')); }
-            }
-             function handleDocClickForSuggestions(e) { /* ... same as before ... */
-                 if (!nameInput || !nameSuggestions) return; if (!nameInput.contains(e.target) && !nameSuggestions.contains(e.target)) { nameSuggestions.style.display = "none"; }
+
+            // Handle Clicking Delete Button
+             function handleDeleteClick(event) {
+                 if (event.target.classList.contains('delete-button')) {
+                     const button = event.target;
+                     const timestampString = button.getAttribute('data-timestamp');
+                     const entryCard = button.closest('.entry-card'); // Find parent card
+                     const entryNameElem = entryCard ? entryCard.querySelector('.entry-card-info p:first-child') : null;
+                     const entryNameText = entryNameElem ? entryNameElem.textContent : 'this entry'; // Get name for prompts
+
+                     if (timestampString) {
+                         const timestamp = parseInt(timestampString, 10); // Ensure it's a number if needed later, though only used as ref path here
+                         if (confirm(`Are you sure you want to mark ${entryNameText} as deleted?\n\nYou will need to provide your name and optionally a reason.`)) {
+                             const deleterName = prompt("Please enter YOUR name (for logging purposes):");
+                             if (deleterName === null || deleterName.trim() === "") {
+                                 alert("Deletion cancelled: Your name is required to log who deleted the entry.");
+                                 console.log("Deletion cancelled: No deleter name provided.");
+                                 return; // Stop deletion
+                             }
+                             const deletionReason = prompt(`Reason for deleting ${entryNameText}? (Optional)`);
+                             if (deletionReason === null) {
+                                 alert("Deletion cancelled.");
+                                 console.log("Deletion cancelled at reason prompt.");
+                                 return; // Stop deletion
+                             }
+                             console.log(`Proceeding to mark entry as deleted: Timestamp=${timestamp}, Deleted By='${deleterName.trim()}', Reason='${deletionReason.trim() || ''}'`);
+                             markEntryAsDeleted(timestampString, deleterName.trim(), deletionReason.trim()); // Pass original string timestamp
+                         } else {
+                             console.log("Deletion mark cancelled by user confirm prompt.");
+                         }
+                     } else {
+                         console.error("Delete button clicked but 'data-timestamp' attribute is missing or empty.", button);
+                         alert("Error: Cannot delete entry because its identifier (timestamp) is missing.");
+                     }
+                 }
              }
 
-            // --- PDF & CSV Generation Functions ---
-            // NOTE: These currently only include ACTIVE entries. Modify if you want deleted ones too.
-            async function getImageBase64(url) { /* ... same as before ... */
-                 const fetchUrl = url; try { const response = await fetch(fetchUrl); if (!response.ok) { throw new Error(`HTTP error! status: ${response.status}`); } const blob = await response.blob(); if (!blob.type.startsWith('image/')) { console.warn(`Workspaceed type: ${blob.type}`); } return new Promise((resolve, reject) => { const reader = new FileReader(); reader.onloadend = () => resolve(reader.result); reader.onerror = reject; reader.readAsDataURL(blob); }); } catch (error) { console.error(`Img fetch error ${url}:`, error); return null; }
-             }
-            async function generatePdf() { /* ... same as before ... */
-                console.log("PDF gen."); if (Object.keys(allEntriesData).length === 0) { alert("No active data for PDF."); return; } if(downloadPdfButton) { downloadPdfButton.textContent = "Generating..."; downloadPdfButton.disabled = true; } if(downloadCsvButton) downloadCsvButton.disabled = true;
-                try { /* ... PDF generation logic using allEntriesData (active entries) ... */
-                     const { jsPDF } = window.jspdf; const doc = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' }); const pageHeight = doc.internal.pageSize.height; const pageWidth = doc.internal.pageSize.width; let yPos = 15; const margin = 10; const contentWidth = pageWidth - 2 * margin; const imageMaxHeight = 50; const imageMaxWidth = contentWidth / 2; const lineSpacing = 5; const entrySpacing = 8; const personSpacing = 12; doc.setFontSize(18); doc.text("Money Saving Tracker - Active Report", pageWidth / 2, yPos, { align: 'center' }); yPos += 8; doc.setFontSize(10); const generationDate = new Date().toLocaleString('en-LK', { timeZone: 'Asia/Colombo' }); doc.text(`Generated on: ${generationDate}`, pageWidth / 2, yPos, { align: 'center' }); yPos += 15; const names = Object.keys(allEntriesData).sort();
-                     for (const name of names) { const entries = allEntriesData[name]; const totalSaved = allSummaryData[name] || 0; const displayName = name.charAt(0).toUpperCase() + name.slice(1); if (yPos + 20 > pageHeight - margin) { doc.addPage(); yPos = 15; } doc.setFontSize(14); doc.setFont(undefined, 'bold'); const splitName = doc.splitTextToSize(displayName, contentWidth); doc.text(splitName, margin, yPos); yPos += (splitName.length * lineSpacing) + 2; doc.setFontSize(11); doc.setFont(undefined, 'normal'); doc.text(`Total Saved (Active): LKR ${totalSaved.toFixed(2)}`, margin, yPos); yPos += lineSpacing * 2; for (const entry of entries) { const entryDate = new Date(entry.timestamp).toLocaleString('en-LK', { timeZone: 'Asia/Colombo' }); const entryAmount = `LKR ${parseFloat(entry.amount).toFixed(2)}`; const textLine1 = `Date: ${entryDate}`; const textLine2 = `Amount: ${entryAmount}`; const textHeight = lineSpacing * 2 + 2; let imgBase64 = null; let finalImgHeight = 0; let finalImgWidth = 0; let imgErrorText = null; let imgFileType = 'JPEG'; if (entry.imageUrl) { imgBase64 = await getImageBase64(entry.imageUrl); if (imgBase64) { try { const imgProps = doc.getImageProperties(imgBase64); imgFileType = imgProps.fileType; let imgWidth = imgProps.width; let imgHeight = imgProps.height; const scale = Math.min(imageMaxWidth / imgWidth, imageMaxHeight / imgHeight, 1); finalImgWidth = imgWidth * scale; finalImgHeight = imgHeight * scale; } catch(e) { imgBase64 = null; imgErrorText = "(Err proc img)"; finalImgHeight = lineSpacing; console.error("jsPDF img props err:", e); } } else { imgErrorText = "(Img load err)"; finalImgHeight = lineSpacing; } } else { imgErrorText = "(No img)"; finalImgHeight = lineSpacing; } const requiredHeight = textHeight + finalImgHeight + entrySpacing; if (yPos + requiredHeight > pageHeight - margin) { doc.addPage(); yPos = 15; } doc.setFontSize(10); doc.text(textLine1, margin, yPos); yPos += lineSpacing; doc.text(textLine2, margin, yPos); yPos += lineSpacing; if (imgBase64) { try { doc.addImage(imgBase64, imgFileType, margin, yPos, finalImgWidth, finalImgHeight); yPos += finalImgHeight + lineSpacing / 2; } catch(e) { doc.setTextColor(255, 0, 0); doc.text("(Err adding img)", margin, yPos); doc.setTextColor(0, 0, 0); yPos += lineSpacing; console.error("jsPDF addImage err:", e); } } else if (imgErrorText) { doc.setTextColor(150, 150, 150); doc.setFontSize(9); doc.text(imgErrorText, margin, yPos); doc.setTextColor(0, 0, 0); doc.setFontSize(10); yPos += lineSpacing; } yPos += entrySpacing - lineSpacing / 2; } yPos += personSpacing - entrySpacing; }
-                     const pageCount = doc.internal.getNumberOfPages(); const footerText = "</>Developed by Lakshan"; const footerY = pageHeight - 7; doc.setFontSize(8); doc.setTextColor(100, 100, 100); for (let i = 1; i <= pageCount; i++) { doc.setPage(i); try { const textWidth = doc.getStringUnitWidth(footerText) * doc.internal.getFontSize() / doc.internal.scaleFactor; const textX = pageWidth - margin - textWidth; doc.text(footerText, textX, footerY); } catch (e) { console.warn("Footer width calc err.", e); doc.text(footerText, margin, footerY); } } doc.setFontSize(10); doc.setTextColor(0, 0, 0); doc.save(`money-saving-active-report-${Date.now()}.pdf`); console.log("PDF ok.");
-                 } catch (pdfError) { console.error("PDF Gen Error:", pdfError); alert("Failed PDF gen."); }
-                 finally { const hasData = Object.keys(allSummaryData).length > 0; if(downloadPdfButton) { downloadPdfButton.textContent = "Download Report (PDF)"; downloadPdfButton.disabled = !hasData; } if(downloadCsvButton) downloadCsvButton.disabled = !hasData; }
-            }
-            function generateCsv() { /* ... currently includes ALL entries (active and deleted). Modify `allRawEntries` in `loadHistory` if needed ... */
-                console.log("CSV gen."); if (allRawEntries.length === 0) { alert("No data for CSV."); return; } if(downloadCsvButton) { downloadCsvButton.textContent = "Generating..."; downloadCsvButton.disabled = true; } if(downloadPdfButton) downloadPdfButton.disabled = true;
-                try { const csvRows = []; const headers = ["Timestamp", "Date", "Name", "Amount", "Image URL", "Is Deleted", "Deleted By", "Deletion Reason", "Deletion Timestamp"]; csvRows.push(headers.map(escapeCsvValue).join(',')); allRawEntries.forEach(entry => { const ts = entry.timestamp; const date = new Date(entry.timestamp).toLocaleString('en-LK', { timeZone: 'Asia/Colombo' }); const name = entry.name.charAt(0).toUpperCase() + entry.name.slice(1); const amount = (parseFloat(entry.amount) || 0).toFixed(2); const imgUrl = entry.imageUrl || ''; const isDel = entry.isDeleted ? 'Yes' : 'No'; const delBy = entry.deletedBy || ''; const delReason = entry.deletionReason || ''; const delTs = entry.deletionTimestamp ? new Date(entry.deletionTimestamp).toLocaleString('en-LK', { timeZone: 'Asia/Colombo' }) : ''; const row = [ts, date, name, amount, imgUrl, isDel, delBy, delReason, delTs]; csvRows.push(row.map(escapeCsvValue).join(',')); }); const csvString = '\uFEFF' + csvRows.join('\n'); const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' }); const link = document.createElement("a"); if (link.download !== undefined) { const url = URL.createObjectURL(blob); link.setAttribute("href", url); link.setAttribute("download", `money-saving-full-data-${Date.now()}.csv`); link.style.visibility = 'hidden'; document.body.appendChild(link); link.click(); document.body.removeChild(link); URL.revokeObjectURL(url); console.log("CSV ok."); } else { alert("CSV dl not supported."); } }
-                catch (csvError) { console.error("CSV Gen Error:", csvError); alert("Failed CSV gen."); }
-                finally { const hasData = allRawEntries.length > 0; const hasActiveData = Object.keys(allSummaryData).length > 0; if(downloadCsvButton) { downloadCsvButton.textContent = "Download Data (CSV)"; downloadCsvButton.disabled = !hasData; } if(downloadPdfButton) downloadPdfButton.disabled = !hasActiveData; }
-            }
-            function escapeCsvValue(value) { /* ... same as before ... */ const stringValue = value === null || value === undefined ? '' : String(value); const escapedQuotes = stringValue.replace(/"/g, '""'); if (escapedQuotes.includes(',') || escapedQuotes.includes('"') || escapedQuotes.includes('\n')) { return `"${escapedQuotes}"`; } return escapedQuotes; }
 
-            // --- Initial Load ---
-            console.log("Running initial loadHistory."); loadHistory(); checkFormValidity();
-        }
+            // Handle Name Input for Suggestions
+            function handleNameInput() {
+                if (!nameInput || !nameSuggestions) return;
+                const inputText = nameInput.value.trim().toLowerCase();
+                nameSuggestions.innerHTML = ""; // Clear previous suggestions
 
-        // --- Initial Page State ---
-        const initialLoginSection = document.getElementById('loginSection'); const initialTrackerSection = document.getElementById('trackerSection'); if (initialLoginSection) initialLoginSection.style.display = 'block'; if (initialTrackerSection) initialTrackerSection.style.display = 'none'; console.log("Initial state set.");
+                if (inputText.length > 0 && previousNames.size > 0) {
+                    // Filter names (case-insensitive)
+                    const filteredNames = Array.from(previousNames)
+                        .filter(name => name.toLowerCase().includes(inputText))
+                        .sort((a, b) => a.localeCompare(b)); // Sort alphabetically
+
+                    if (filteredNames.length > 0) {
+                        nameSuggestions.style.display = "block"; // Show container
+                        filteredNames.forEach((name) => {
+                            const suggestionDiv = document.createElement("div");
+                            // Display suggestion with original capitalization (first letter upper)
+                            suggestionDiv.textContent = name.charAt(0).toUpperCase() + name.slice(1);
+                            suggestionDiv.addEventListener("click", () => {
+                                nameInput.value = name.charAt(0).toUpperCase() + name.slice(1); // Set input value
+                                nameSuggestions.style.display = "none"; // Hide suggestions
+                                checkFormValidity(); // Update form validity
+                                nameInput.focus(); // Keep focus on name input
+                            });
+                            nameSuggestions.appendChild(suggestionDiv);
+                        });
+                    } else {
+                        nameSuggestions.style.display = "none"; // Hide if no matches
+                    }
+                } else {
+                    nameSuggestions.style.display = "none"; // Hide if input is empty
+                }
+            }
+
+            // Handle Focusing on Name Input (Show all suggestions if empty)
+            function handleNameFocus() {
+                if (!nameInput || !nameSuggestions) return;
+                const inputText = nameInput.value.trim().toLowerCase();
+                if (inputText.length === 0 && previousNames.size > 0) {
+                    // Show all previous names if input is empty on focus
+                    nameSuggestions.innerHTML = "";
+                    nameSuggestions.style.display = "block";
+                    const sortedNames = Array.from(previousNames).sort((a, b) => a.localeCompare(b));
+                    sortedNames.forEach((name) => {
+                        const suggestionDiv = document.createElement("div");
+                        suggestionDiv.textContent = name.charAt(0).toUpperCase() + name.slice(1);
+                        suggestionDiv.addEventListener("click", () => {
+                            nameInput.value = name.charAt(0).toUpperCase() + name.slice(1);
+                            nameSuggestions.style.display = "none";
+                            checkFormValidity();
+                            nameInput.focus();
+                        });
+                        nameSuggestions.appendChild(suggestionDiv);
+                    });
+                } else if (inputText.length > 0) {
+                    // If not empty, trigger the normal filtering as if user typed
+                    handleNameInput();
+                }
+            }
+
+            // Handle Clicking Outside Name Input/Suggestions
+            function handleDocClickForSuggestions(e) {
+                if (!nameInput || !nameSuggestions) return;
+                // Hide suggestions if click is not on input or suggestions list
+                if (!nameInput.contains(e.target) && !nameSuggestions.contains(e.target)) {
+                    nameSuggestions.style.display = "none";
+                }
+            }
+
+            // --- WhatsApp Integration ---
+            function generateWhatsAppReportText() {
+                 console.log("Generating custom WhatsApp report text...");
+                 function formatDate(timestamp) { /* ... (same date helper function) ... */ if (!timestamp) return 'N/A'; try { const date = new Date(timestamp); const year = date.getFullYear(); const month = String(date.getMonth() + 1).padStart(2, '0'); const day = String(date.getDate()).padStart(2, '0'); return `${year}/${month}/${day}`; } catch (e) { console.error("Error formatting date:", e); return 'Invalid Date'; } }
+                 let report = "________\n"; report += "❝𝐓𝐑𝐀𝐂𝐊𝐄𝐑 𝐑𝐄𝐏𝐎𝐑𝐓❞\n"; report += "________\n"; report += "𝐒𝐚𝐯𝐞 𝐦𝐨𝐧𝐞𝐲, 𝐚𝐧𝐝 𝐦𝐨𝐧𝐞𝐲 𝐰𝐢𝐥𝐥 𝐬𝐚𝐯𝐞 𝐲𝐨𝐮❤️\n\n";
+                 report += `✅Total amount=> *LKR ${totalAmount.toFixed(2)} 💰*\n\n`;
+                 const sortedNames = Object.keys(allSummaryData).sort();
+                 if (sortedNames.length > 0) {
+                     sortedNames.forEach(name => {
+                         const displayName = name.charAt(0).toUpperCase() + name.slice(1); const personTotal = allSummaryData[name].toFixed(2); const entriesForPerson = allEntriesData[name];
+                         let lastDepositDate = 'N/A'; let lastDepositAmount = 'N/A';
+                         if (entriesForPerson && entriesForPerson.length > 0) { const lastEntry = entriesForPerson[0]; lastDepositDate = formatDate(lastEntry.timestamp); lastDepositAmount = (parseFloat(lastEntry.amount) || 0).toFixed(2); }
+                         report += `╭─── 🧙‍♂️:${displayName}\n`; report += ` |\n`; report += ` |   *🪙Total deposit:*\n`; report += ` |        •LKR ${personTotal} ⬇️\n`; report += ` |\n`; report += ` |   *📅Last deposit:*\n`; report += ` |         •${lastDepositDate}\n`; report += ` |         •LKR - ${lastDepositAmount}\n`; report += `╰───────────●●►\n\n`;
+                     });
+                 } else { report += "No savings recorded yet.\n\n"; }
+                 report += "━━━━━━━━━━━━━━\n"; report += "> </>𝙳𝚎𝚟𝚘𝚕𝚘𝚙𝚎𝚍 𝚋𝚢 𝙻𝚊𝚔𝚜𝚑𝚊𝚗🦊";
+                 console.log("Custom report text generated."); return report;
+            }
+
+            function handleSendWhatsApp() {
+                console.log("WhatsApp button clicked.");
+                if (Object.keys(allSummaryData).length === 0 && totalAmount === 0) { alert("No data available to send."); return; }
+                const friendNumber = prompt("Enter friend's WhatsApp number with country code (e.g., +9477...):");
+                if (!friendNumber) { console.log("WhatsApp number prompt cancelled."); return; }
+                const cleanedNumber = friendNumber.replace(/\s+/g, '');
+                if (!/^\+\d{8,}$/.test(cleanedNumber)) { alert("Invalid phone number format. Please use the international format starting with '+' followed by country code and number (e.g., +94764232618)."); return; }
+                try { // Add try-catch around report generation and encoding
+                    const reportText = generateWhatsAppReportText();
+                    const encodedText = encodeURIComponent(reportText);
+                    const whatsappUrl = `https://api.whatsapp.com/send?phone=${cleanedNumber}&text=${encodedText}`;
+                    console.log(`Generated WA URL (not opening yet): ${whatsappUrl}`);
+                    showWhatsAppModal(cleanedNumber, whatsappUrl);
+                } catch (waError) {
+                    console.error("Error preparing WhatsApp message:", waError);
+                    alert("Could not prepare WhatsApp message. Check console (F12) for errors.");
+                }
+            }
+
+
+            // --- PDF & CSV Generation ---
+             async function getImageBase64(url) { /* ... (same as before) ... */ const fetchUrl = url; try { const response = await fetch(fetchUrl); if (!response.ok) { throw new Error(`HTTP error! status: ${response.status}`); } const blob = await response.blob(); if (!blob.type.startsWith('image/')) { console.warn(`Workspaceed blob is not an image type: ${blob.type}`); } return new Promise((resolve, reject) => { const reader = new FileReader(); reader.onloadend = () => resolve(reader.result); reader.onerror = reject; reader.readAsDataURL(blob); }); } catch (error) { console.error(`Failed to fetch image ${url}:`, error); return null; } }
+             async function generatePdf() { /* ... (same as before, with previous robustness improvements) ... */ console.log("PDF generation started."); if (Object.keys(allSummaryData).length === 0) { alert("No active data available to generate PDF report."); return; } if(downloadPdfButton) { downloadPdfButton.textContent = "Generating PDF..."; downloadPdfButton.disabled = true; } if(downloadCsvButton) downloadCsvButton.disabled = true; if(sendWhatsAppButton) sendWhatsAppButton.disabled = true; try { const { jsPDF } = window.jspdf; const doc = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' }); let yPos = 15; const margin = 10; const pageHeight = doc.internal.pageSize.height; const pageWidth = doc.internal.pageSize.width; const contentWidth = pageWidth - 2 * margin; const imageMaxHeight = 50; const imageMaxWidth = contentWidth / 2; const lineSpacing = 5; const entrySpacing = 8; const personSpacing = 12; doc.setFontSize(18); doc.text("Money Saving Tracker - Active Report", pageWidth / 2, yPos, { align: 'center' }); yPos += 8; doc.setFontSize(10); const generationDate = new Date().toLocaleString('en-LK', { timeZone: 'Asia/Colombo' }); doc.text(`Generated on: ${generationDate}`, pageWidth / 2, yPos, { align: 'center' }); yPos += 15; const names = Object.keys(allEntriesData).sort(); for (const name of names) { const entries = allEntriesData[name]; if (!entries || entries.length === 0) continue; const totalSaved = allSummaryData[name] || 0; const displayName = name.charAt(0).toUpperCase() + name.slice(1); if (yPos + 20 > pageHeight - margin) { doc.addPage(); yPos = 15; } doc.setFontSize(14); doc.setFont(undefined, 'bold'); const splitName = doc.splitTextToSize(displayName, contentWidth); doc.text(splitName, margin, yPos); yPos += (splitName.length * lineSpacing) + 2; doc.setFontSize(11); doc.setFont(undefined, 'normal'); doc.text(`Total Saved (Active): LKR ${totalSaved.toFixed(2)}`, margin, yPos); yPos += lineSpacing * 2; for (const entry of entries) { const entryDate = new Date(entry.timestamp).toLocaleString('en-LK', { timeZone: 'Asia/Colombo' }); const entryAmount = `LKR ${parseFloat(entry.amount).toFixed(2)}`; const textLine1 = `Date: ${entryDate}`; const textLine2 = `Amount: ${entryAmount}`; const textHeight = lineSpacing * 2 + 2; let imgBase64 = null, finalImgHeight = 0, finalImgWidth = 0, imgErrorText = null, imgFileType = 'JPEG'; if (entry.imageUrl) { imgBase64 = await getImageBase64(entry.imageUrl); if (imgBase64) { try { const imgProps = doc.getImageProperties(imgBase64); imgFileType = imgProps.fileType; let imgWidth = imgProps.width, imgHeight = imgProps.height; const scale = Math.min(imageMaxWidth / imgWidth, imageMaxHeight / imgHeight, 1); finalImgWidth = imgWidth * scale; finalImgHeight = imgHeight * scale; } catch(e) { imgBase64 = null; imgErrorText = "(Error processing image)"; finalImgHeight = lineSpacing; console.error("jsPDF getImageProperties error:", e); } } else { imgErrorText = "(Image load failed)"; finalImgHeight = lineSpacing; } } else { imgErrorText = "(No image provided)"; finalImgHeight = lineSpacing; } const requiredHeight = textHeight + finalImgHeight + entrySpacing; if (yPos + requiredHeight > pageHeight - margin) { doc.addPage(); yPos = 15; } doc.setFontSize(10); doc.text(textLine1, margin, yPos); yPos += lineSpacing; doc.text(textLine2, margin, yPos); yPos += lineSpacing; if (imgBase64) { try { doc.addImage(imgBase64, imgFileType.toUpperCase(), margin, yPos, finalImgWidth, finalImgHeight); yPos += finalImgHeight + lineSpacing / 2; } catch(e) { doc.setTextColor(255, 0, 0); doc.text("(Error adding image to PDF)", margin, yPos); doc.setTextColor(0, 0, 0); yPos += lineSpacing; console.error("jsPDF addImage error:", e); } } else if (imgErrorText) { doc.setTextColor(150, 150, 150); doc.setFontSize(9); doc.text(imgErrorText, margin, yPos); doc.setTextColor(0, 0, 0); doc.setFontSize(10); yPos += lineSpacing; } yPos += entrySpacing - lineSpacing / 2; } yPos += personSpacing - entrySpacing; } const pageCount = doc.internal.getNumberOfPages(); const footerText = "</> Developed by Lakshan"; const footerY = pageHeight - 7; doc.setFontSize(8); doc.setTextColor(100, 100, 100); for (let i = 1; i <= pageCount; i++) { doc.setPage(i); try { const textWidth = doc.getStringUnitWidth(footerText) * doc.internal.getFontSize() / doc.internal.scaleFactor; const textX = (pageWidth - textWidth) / 2; doc.text(footerText, textX, footerY); const pageNumText = `Page ${i} of ${pageCount}`; const pageNumWidth = doc.getStringUnitWidth(pageNumText) * doc.internal.getFontSize() / doc.internal.scaleFactor; doc.text(pageNumText, pageWidth - margin - pageNumWidth, footerY); } catch (e) { console.warn("Error adding footer:", e); doc.text(footerText, margin, footerY); } } doc.setFontSize(10); doc.setTextColor(0, 0, 0); doc.save(`money-saving-active-report-${Date.now()}.pdf`); console.log("PDF generation successful."); } catch (pdfError) { console.error("PDF Generation Failed:", pdfError); alert("Failed to generate PDF report. Please check the console (F12) for errors."); } finally { const hasActiveData = Object.keys(allSummaryData).length > 0; if(downloadPdfButton) { downloadPdfButton.textContent = "Download Report (PDF)"; downloadPdfButton.disabled = !hasActiveData; } if(downloadCsvButton) downloadCsvButton.disabled = allRawEntries.length === 0; if(sendWhatsAppButton) sendWhatsAppButton.disabled = !hasActiveData;} }
+             function generateCsv() { /* ... (same as before, with previous robustness improvements) ... */ console.log("CSV generation started."); if (allRawEntries.length === 0) { alert("No data available to generate CSV."); return; } if(downloadCsvButton) { downloadCsvButton.textContent = "Generating CSV..."; downloadCsvButton.disabled = true; } if(downloadPdfButton) downloadPdfButton.disabled = true; if(sendWhatsAppButton) sendWhatsAppButton.disabled = true; try { const csvRows = []; const headers = ["Timestamp (Unix)", "Date (Local)", "Name", "Amount (LKR)", "Image URL", "Is Deleted", "Deleted By", "Deletion Reason", "Deletion Timestamp (Local)"]; csvRows.push(headers.map(escapeCsvValue).join(',')); allRawEntries.forEach(entry => { const ts = entry.timestamp || '', date = entry.timestamp ? new Date(entry.timestamp).toLocaleString('en-LK', { timeZone: 'Asia/Colombo' }) : '', name = entry.name ? entry.name.charAt(0).toUpperCase() + entry.name.slice(1) : '', amount = (parseFloat(entry.amount) || 0).toFixed(2), imgUrl = entry.imageUrl || '', isDel = entry.isDeleted ? 'Yes' : 'No', delBy = entry.deletedBy || '', delReason = entry.deletionReason || '', delTs = entry.deletionTimestamp ? new Date(entry.deletionTimestamp).toLocaleString('en-LK', { timeZone: 'Asia/Colombo' }) : ''; const row = [ts, date, name, amount, imgUrl, isDel, delBy, delReason, delTs]; csvRows.push(row.map(escapeCsvValue).join(',')); }); const csvString = '\uFEFF' + csvRows.join('\n'); const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' }); const link = document.createElement("a"); if (link.download !== undefined) { const url = URL.createObjectURL(blob); link.setAttribute("href", url); link.setAttribute("download", `money-saving-full-data-${Date.now()}.csv`); link.style.visibility = 'hidden'; document.body.appendChild(link); link.click(); document.body.removeChild(link); URL.revokeObjectURL(url); console.log("CSV generation successful."); } else { alert("Your browser does not support automatic CSV download."); } } catch (csvError) { console.error("CSV Generation Failed:", csvError); alert("Failed to generate CSV file. Please check the console (F12) for errors."); } finally { const hasData = allRawEntries.length > 0; const hasActiveData = Object.keys(allSummaryData).length > 0; if(downloadCsvButton) { downloadCsvButton.textContent = "Download Data (CSV)"; downloadCsvButton.disabled = !hasData; } if(downloadPdfButton) downloadPdfButton.disabled = !hasActiveData; if(sendWhatsAppButton) sendWhatsAppButton.disabled = !hasActiveData;} }
+             function escapeCsvValue(value) { /* ... (same as before) ... */ const stringValue = value === null || value === undefined ? '' : String(value); const escapedQuotes = stringValue.replace(/"/g, '""'); if (escapedQuotes.includes(',') || escapedQuotes.includes('"') || escapedQuotes.includes('\n') || escapedQuotes.includes('\r')) { return `"${escapedQuotes}"`; } return escapedQuotes; }
+
+
+            // --- Initial Setup Calls ---
+            console.log("Running initial setup inside initializeTracker.");
+            loadHistory(); // Load initial data from Firebase
+            checkFormValidity(); // Set initial state of submit button
+        } // --- End of initializeTracker ---
+
+        // Initial Page State & Listeners (DOM Ready)
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const initialLoginSection = document.getElementById('loginSection');
+            const initialTrackerSection = document.getElementById('trackerSection');
+            if (initialLoginSection) initialLoginSection.style.display = 'block'; // Show login initially
+            if (initialTrackerSection) initialTrackerSection.style.display = 'none'; // Hide tracker initially
+
+            const passcodeInputElem = document.getElementById('passcodeInput');
+            if (passcodeInputElem) {
+                passcodeInputElem.addEventListener('keypress', function(event) {
+                    if (event.key === 'Enter') {
+                        event.preventDefault(); // Prevent default Enter behavior
+                        checkPasscode(); // Trigger passcode check on Enter key
+                    }
+                });
+                // Optionally focus on passcode input on load
+                // passcodeInputElem.focus(); 
+            }
+            console.log("DOM fully loaded. Initial display state set. Ready for passcode.");
+        });
 
     </script>
 
